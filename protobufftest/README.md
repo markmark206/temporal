@@ -15,7 +15,9 @@ Here are some experinments around compiling proto buffs around the following thr
 
 The results of the compiling of the three options can be found in [./out](./out/).
 
-The results of running a couple of linters on the three options can be found in [./linters.md](./linters.md)
+The results of running a couple of linters on the three options can be found in [./linters.md](./linters.md).
+
+Assuming tooling is installed on the machine, these artifacts can be recreated by running `make` and `make lint`.
 
 
 # Notes
