@@ -6,6 +6,7 @@ all:
 		echo "Compiling file $$proto_file"; \
 		protoc $$proto_file --cpp_out=$(OUT_DIR)/cpp --java_out=$(OUT_DIR)/java --ruby_out=$(OUT_DIR)/ruby --python_out=$(OUT_DIR)/python --js_out=$(OUT_DIR)/js --csharp_out=$(OUT_DIR)/csharp; \
 		protoc --proto_path=. --gogofaster_out=Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,plugins=grpc,paths=source_relative:$(OUT_DIR)/golang $$proto_file; \
+		protoc --proto_path=. --gogoslick_out=Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,plugins=grpc,paths=source_relative:$(OUT_DIR)/golang3a $$proto_file; \
 	done
 
 lint:
