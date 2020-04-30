@@ -24,26 +24,37 @@ Assuming tooling is installed on the machine, these artifacts can be recreated b
 
 Criteria for evaluation: 
 * What makes linters happy? (out of the box)
-   both linters are immediately happy with Option 3
+
+  Bth linters are immediately happy with Option 3
 
 * What is linter enforcable? (out of the box)
-   Option 3, but all options are likely enforcable by crafting linter rules.
+  
+  Option 3, but all options are likely enforcable by crafting linter rules.
 
 * What is the "official" recommended approach?
+  
   Option 3
 
 * What is the "commonly used" approach?
+  
   Option 2
 
 * Simplest to grok by a new dev and outside community / requires the least amount of explanation? 
+  
   Option 3 
 
 * What is the most concise in proto?
+  
   Option 1 is probably least typing in .proto
 
 * What causes the most consistent / cleanest client code? 
-*   golang? option 2 and option 3
-*   java? no idea.
+-   golang?
+
+option 2 and option 3
+
+-   java?
+
+no idea.
 
 
 # This dev's recommendation
