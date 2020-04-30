@@ -33,6 +33,7 @@ import (
 	"github.com/temporalio/temporal/.gen/proto/matchingservice"
 	"github.com/temporalio/temporal/common"
 	"github.com/temporalio/temporal/common/persistence"
+	// tasklistpb "go.temporal.io/temporal-proto/tasklist"
 )
 
 var _ Client = (*clientImpl)(nil)

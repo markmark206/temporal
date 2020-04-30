@@ -613,7 +613,7 @@ func (e *matchingEngineImpl) ListTaskListPartitions(
 	return &resp, nil
 }
 
-func (e *matchingEngineImpl) listTaskListPartitions(request *matchingservice.ListTaskListPartitionsRequest, taskListType int32) ([]*tasklistpb.TaskListPartitionMetadata, error) {
+func (e *matchingEngineImpl) listTaskListPartitions(request *matchingservice.ListTaskListPartitionsRequest, taskListType tasklistpb.TaskListType) ([]*tasklistpb.TaskListPartitionMetadata, error) {
 	partitions, err := e.getAllPartitions(
 		request.GetNamespace(),
 		*request.TaskList,
@@ -650,7 +650,7 @@ func (e *matchingEngineImpl) getHostInfo(partitionKey string) (string, error) {
 func (e *matchingEngineImpl) getAllPartitions(
 	namespace string,
 	taskList tasklistpb.TaskList,
-	taskListType int32,
+	taskListType tasklistpb.TaskListType,
 ) ([]string, error) {
 	var partitionKeys []string
 	namespaceID, err := e.namespaceCache.GetNamespaceID(namespace)

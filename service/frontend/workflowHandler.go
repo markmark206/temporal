@@ -3653,7 +3653,7 @@ func (wh *WorkflowHandler) checkPermission(
 	return nil
 }
 
-func (wh *WorkflowHandler) cancelOutstandingPoll(ctx context.Context, err error, namespaceID string, taskListType int32,
+func (wh *WorkflowHandler) cancelOutstandingPoll(ctx context.Context, err error, namespaceID string, taskListType tasklistpb.TaskListType,
 	taskList *tasklistpb.TaskList, pollerID string) error {
 	// First check if this err is due to context cancellation.  This means client connection to frontend is closed.
 	if ctx.Err() == context.Canceled {
