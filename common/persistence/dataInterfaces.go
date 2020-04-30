@@ -125,12 +125,6 @@ const (
 	WorkflowStateCorrupted
 )
 
-// Types of task lists
-const (
-	TaskListTypeDecision = tasklistpb.TaskListType_Decision
-	TaskListTypeActivity = tasklistpb.TaskListType_Activity
-)
-
 // Kinds of task lists
 const (
 	TaskListKindNormal int32 = iota

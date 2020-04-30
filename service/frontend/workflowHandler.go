@@ -820,7 +820,7 @@ func (wh *WorkflowHandler) PollForDecisionTask(ctx context.Context, request *wor
 
 	err = backoff.Retry(op, frontendServiceRetryPolicy, common.IsServiceTransientError)
 	if err != nil {
-		err = wh.cancelOutstandingPoll(ctx, err, namespaceID, persistence.TaskListTypeDecision, request.TaskList, pollerID)
+		err = wh.cancelOutstandingPoll(ctx, err, namespaceID, tasklistpb.TaskListType_Decision, request.TaskList, pollerID)
 		if err != nil {
 			// For all other errors log an error and return it back to client.
 			ctxTimeout := "not-set"
@@ -1079,7 +1079,7 @@ func (wh *WorkflowHandler) PollForActivityTask(ctx context.Context, request *wor
 
 	err = backoff.Retry(op, frontendServiceRetryPolicy, common.IsServiceTransientError)
 	if err != nil {
-		err = wh.cancelOutstandingPoll(ctx, err, namespaceID, persistence.TaskListTypeActivity, request.TaskList, pollerID)
+		err = wh.cancelOutstandingPoll(ctx, err, namespaceID, tasklistpb.TaskListType_Activity, request.TaskList, pollerID)
 		if err != nil {
 			// For all other errors log an error and return it back to client.
 			ctxTimeout := "not-set"

@@ -1240,7 +1240,7 @@ func (s *TestBase) CreateDecisionTask(namespaceID primitives.UUID, workflowExecu
 	leaseResponse, err := s.TaskMgr.LeaseTaskList(&p.LeaseTaskListRequest{
 		NamespaceID: namespaceID,
 		TaskList:    taskList,
-		TaskType:    p.TaskListTypeDecision,
+		TaskType:    tasklistpb.TaskListType_Decision,
 	})
 	if err != nil {
 		return 0, err
@@ -1281,7 +1281,7 @@ func (s *TestBase) CreateActivityTasks(namespaceID primitives.UUID, workflowExec
 		_, ok := taskLists[tl]
 		if !ok {
 			resp, err := s.TaskMgr.LeaseTaskList(
-				&p.LeaseTaskListRequest{NamespaceID: namespaceID, TaskList: tl, TaskType: p.TaskListTypeActivity})
+				&p.LeaseTaskListRequest{NamespaceID: namespaceID, TaskList: tl, TaskType: tasklistpb.TaskListType_Activity})
 			if err != nil {
 				return []int64{}, err
 			}

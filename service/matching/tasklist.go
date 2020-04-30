@@ -30,7 +30,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/temporalio/temporal/common/persistence"
 	tasklistpb "go.temporal.io/temporal-proto/tasklist"
 )
 
@@ -150,7 +149,7 @@ func (tid *taskListID) String() string {
 	b.WriteString("name=")
 	b.WriteString(tid.name)
 	b.WriteString("type=")
-	if tid.taskType == persistence.TaskListTypeActivity {
+	if tid.taskType == tasklistpb.TaskListType_Activity {
 		b.WriteString("activity")
 	} else {
 		b.WriteString("decision")
