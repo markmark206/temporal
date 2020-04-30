@@ -3,9 +3,9 @@
 
 Here are some experinments around compiling proto buffs around the following three options:
 
-[Option 1](./option1.proto): Prefix UNSPECIFIED (and only UNSPECIFIED) with the name of the type, in .proto file (https://temporal.quip.com/npE4APlXSgye/Enum-Zero-Defaults#ZFKACAV0wcu)
+[Option 1](./option1.proto): Prefix `UNSPECIFIED` (and only `UNSPECIFIED`) with the name of the type, in `.proto` file (https://temporal.quip.com/npE4APlXSgye/Enum-Zero-Defaults#ZFKACAV0wcu)
 
-[Option 2](./option2.proto): Wrap each `enum` construct in a message (https://temporal.quip.com/npE4APlXSgye/Enum-Zero-Defaults#ZFKACAq4dGN),
+[Option 2](./option2.proto): Wrap each `enum` construct in a `message` (https://temporal.quip.com/npE4APlXSgye/Enum-Zero-Defaults#ZFKACAq4dGN),
 
 [Option 3](./option3.proto): Follow Googles style guidelines, and prefix all enum values with type name. (https://developers.google.com/protocol-buffers/docs/style#enums)
 
