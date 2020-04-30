@@ -84,6 +84,32 @@ inline bool ContinueAsNewInitiator_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ContinueAsNewInitiator>(
     ContinueAsNewInitiator_descriptor(), name, value);
 }
+enum Bird : int {
+  BIRD_UNSPECIFIED = 0,
+  BLUEJAY = 1,
+  CHICKEN = 2,
+  Bird_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  Bird_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool Bird_IsValid(int value);
+constexpr Bird Bird_MIN = BIRD_UNSPECIFIED;
+constexpr Bird Bird_MAX = CHICKEN;
+constexpr int Bird_ARRAYSIZE = Bird_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Bird_descriptor();
+template<typename T>
+inline const std::string& Bird_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, Bird>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function Bird_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    Bird_descriptor(), enum_t_value);
+}
+inline bool Bird_Parse(
+    const std::string& name, Bird* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Bird>(
+    Bird_descriptor(), name, value);
+}
 // ===================================================================
 
 
@@ -110,6 +136,11 @@ template <> struct is_proto_enum< ::option1::ContinueAsNewInitiator> : ::std::tr
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::option1::ContinueAsNewInitiator>() {
   return ::option1::ContinueAsNewInitiator_descriptor();
+}
+template <> struct is_proto_enum< ::option1::Bird> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::option1::Bird>() {
+  return ::option1::Bird_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

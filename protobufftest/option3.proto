@@ -12,3 +12,9 @@ enum ContinueAsNewInitiator {
    CONTINUE_AS_NEW_INITIATOR_RETRY = 2;
    CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE = 3;
 }
+
+enum Bird {
+    BIRD_UNSPECIFIED = 0;
+    BIRD_BLUEJAY = 1;
+    BIRD_CHICKEN = 2;
+}

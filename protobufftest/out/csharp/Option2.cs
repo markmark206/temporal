@@ -26,12 +26,14 @@ namespace Option2 {
           string.Concat(
             "Cg1vcHRpb24yLnByb3RvEgdvcHRpb24yIlwKFkNvbnRpbnVlQXNOZXdJbml0",
             "aWF0b3IiQgoERW51bRIPCgtVTlNQRUNJRklFRBAAEgsKB0RFQ0lERVIQARIJ",
-            "CgVSRVRSWRACEhEKDUNST05fU0NIRURVTEUQA0IjChNpby50ZW1wb3JhbC5v",
-            "cHRpb24yQgpQcm90b05hbWVzUAFiBnByb3RvMw=="));
+            "CgVSRVRSWRACEhEKDUNST05fU0NIRURVTEUQAyI5CgRCaXJkIjEKBEVudW0S",
+            "DwoLVU5TUEVDSUZJRUQQABILCgdCTFVFSkFZEAESCwoHQ0hJQ0tFThACQiMK",
+            "E2lvLnRlbXBvcmFsLm9wdGlvbjJCClByb3RvTmFtZXNQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Option2.ContinueAsNewInitiator), global::Option2.ContinueAsNewInitiator.Parser, null, null, new[]{ typeof(global::Option2.ContinueAsNewInitiator.Types.Enum) }, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Option2.ContinueAsNewInitiator), global::Option2.ContinueAsNewInitiator.Parser, null, null, new[]{ typeof(global::Option2.ContinueAsNewInitiator.Types.Enum) }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Option2.Bird), global::Option2.Bird.Parser, null, null, new[]{ typeof(global::Option2.Bird.Types.Enum) }, null, null)
           }));
     }
     #endregion
@@ -146,6 +148,120 @@ namespace Option2 {
         [pbr::OriginalName("DECIDER")] Decider = 1,
         [pbr::OriginalName("RETRY")] Retry = 2,
         [pbr::OriginalName("CRON_SCHEDULE")] CronSchedule = 3,
+      }
+
+    }
+    #endregion
+
+  }
+
+  public sealed partial class Bird : pb::IMessage<Bird> {
+    private static readonly pb::MessageParser<Bird> _parser = new pb::MessageParser<Bird>(() => new Bird());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<Bird> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Option2.Option2Reflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Bird() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Bird(Bird other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Bird Clone() {
+      return new Bird(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as Bird);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(Bird other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(Bird other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the Bird message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum Enum {
+        [pbr::OriginalName("UNSPECIFIED")] Unspecified = 0,
+        [pbr::OriginalName("BLUEJAY")] Bluejay = 1,
+        [pbr::OriginalName("CHICKEN")] Chicken = 2,
       }
 
     }

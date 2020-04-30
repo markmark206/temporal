@@ -12,3 +12,9 @@ enum ContinueAsNewInitiator {
    RETRY = 2;
    CRON_SCHEDULE = 3;
 }
+
+enum Bird {
+   BIRD_UNSPECIFIED = 0;
+   BLUEJAY = 1;
+   CHICKEN = 2;
+}

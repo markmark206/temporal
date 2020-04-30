@@ -8,10 +8,18 @@ option java_multiple_files = true;
 
 
 message ContinueAsNewInitiator {
-    enum Enum{
+    enum Enum {
         UNSPECIFIED = 0;
         DECIDER = 1;
         RETRY = 2;
         CRON_SCHEDULE = 3;
     }
+}
+
+message Bird {
+    enum Enum {
+        UNSPECIFIED = 0;
+        BLUEJAY = 1;
+        CHICKEN = 2;
+   }
 }

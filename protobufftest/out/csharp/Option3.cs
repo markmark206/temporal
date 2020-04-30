@@ -28,11 +28,13 @@ namespace Option3 {
             "dGlhdG9yEikKJUNPTlRJTlVFX0FTX05FV19JTklUSUFUT1JfVU5TUEVDSUZJ",
             "RUQQABIlCiFDT05USU5VRV9BU19ORVdfSU5JVElBVE9SX0RFQ0lERVIQARIj",
             "Ch9DT05USU5VRV9BU19ORVdfSU5JVElBVE9SX1JFVFJZEAISKwonQ09OVElO",
-            "VUVfQVNfTkVXX0lOSVRJQVRPUl9DUk9OX1NDSEVEVUxFEANCIwoTaW8udGVt",
-            "cG9yYWwub3B0aW9uM0IKUHJvdG9OYW1lc1ABYgZwcm90bzM="));
+            "VUVfQVNfTkVXX0lOSVRJQVRPUl9DUk9OX1NDSEVEVUxFEAMqQAoEQmlyZBIU",
+            "ChBCSVJEX1VOU1BFQ0lGSUVEEAASEAoMQklSRF9CTFVFSkFZEAESEAoMQklS",
+            "RF9DSElDS0VOEAJCIwoTaW8udGVtcG9yYWwub3B0aW9uM0IKUHJvdG9OYW1l",
+            "c1ABYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Option3.ContinueAsNewInitiator), }, null, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Option3.ContinueAsNewInitiator), typeof(global::Option3.Bird), }, null, null));
     }
     #endregion
 
@@ -43,6 +45,12 @@ namespace Option3 {
     [pbr::OriginalName("CONTINUE_AS_NEW_INITIATOR_DECIDER")] Decider = 1,
     [pbr::OriginalName("CONTINUE_AS_NEW_INITIATOR_RETRY")] Retry = 2,
     [pbr::OriginalName("CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE")] CronSchedule = 3,
+  }
+
+  public enum Bird {
+    [pbr::OriginalName("BIRD_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("BIRD_BLUEJAY")] Bluejay = 1,
+    [pbr::OriginalName("BIRD_CHICKEN")] Chicken = 2,
   }
 
   #endregion

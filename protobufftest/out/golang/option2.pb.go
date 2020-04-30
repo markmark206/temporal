@@ -53,6 +53,34 @@ func (ContinueAsNewInitiator_Enum) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_a1ace0f65baf2931, []int{0, 0}
 }
 
+type Bird_Enum int32
+
+const (
+	Bird_UNSPECIFIED Bird_Enum = 0
+	Bird_BLUEJAY     Bird_Enum = 1
+	Bird_CHICKEN     Bird_Enum = 2
+)
+
+var Bird_Enum_name = map[int32]string{
+	0: "UNSPECIFIED",
+	1: "BLUEJAY",
+	2: "CHICKEN",
+}
+
+var Bird_Enum_value = map[string]int32{
+	"UNSPECIFIED": 0,
+	"BLUEJAY":     1,
+	"CHICKEN":     2,
+}
+
+func (x Bird_Enum) String() string {
+	return proto.EnumName(Bird_Enum_name, int32(x))
+}
+
+func (Bird_Enum) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_a1ace0f65baf2931, []int{1, 0}
+}
+
 type ContinueAsNewInitiator struct {
 }
 
@@ -89,15 +117,53 @@ func (m *ContinueAsNewInitiator) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ContinueAsNewInitiator proto.InternalMessageInfo
 
+type Bird struct {
+}
+
+func (m *Bird) Reset()         { *m = Bird{} }
+func (m *Bird) String() string { return proto.CompactTextString(m) }
+func (*Bird) ProtoMessage()    {}
+func (*Bird) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a1ace0f65baf2931, []int{1}
+}
+func (m *Bird) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Bird) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Bird.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Bird) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Bird.Merge(m, src)
+}
+func (m *Bird) XXX_Size() int {
+	return m.Size()
+}
+func (m *Bird) XXX_DiscardUnknown() {
+	xxx_messageInfo_Bird.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Bird proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterEnum("option2.ContinueAsNewInitiator_Enum", ContinueAsNewInitiator_Enum_name, ContinueAsNewInitiator_Enum_value)
+	proto.RegisterEnum("option2.Bird_Enum", Bird_Enum_name, Bird_Enum_value)
 	proto.RegisterType((*ContinueAsNewInitiator)(nil), "option2.ContinueAsNewInitiator")
+	proto.RegisterType((*Bird)(nil), "option2.Bird")
 }
 
 func init() { proto.RegisterFile("option2.proto", fileDescriptor_a1ace0f65baf2931) }
 
 var fileDescriptor_a1ace0f65baf2931 = []byte{
-	// 198 bytes of a gzipped FileDescriptorProto
+	// 230 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xcd, 0x2f, 0x28, 0xc9,
 	0xcc, 0xcf, 0x33, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x87, 0x72, 0x95, 0x62, 0xb8,
 	0xc4, 0x9c, 0xf3, 0xf3, 0x4a, 0x32, 0xf3, 0x4a, 0x53, 0x1d, 0x8b, 0xfd, 0x52, 0xcb, 0x3d, 0xf3,
@@ -105,12 +171,14 @@ var fileDescriptor_a1ace0f65baf2931 = []byte{
 	0xf8, 0xb9, 0xb8, 0x43, 0xfd, 0x82, 0x03, 0x5c, 0x9d, 0x3d, 0xdd, 0x3c, 0x5d, 0x5d, 0x04, 0x18,
 	0x84, 0xb8, 0xb9, 0xd8, 0x5d, 0x5c, 0x9d, 0x3d, 0x5d, 0x5c, 0x83, 0x04, 0x18, 0x85, 0x38, 0xb9,
 	0x58, 0x83, 0x5c, 0x43, 0x82, 0x22, 0x05, 0x98, 0x84, 0x04, 0xb9, 0x78, 0x9d, 0x83, 0xfc, 0xfd,
-	0xe2, 0x83, 0x9d, 0x3d, 0x5c, 0x5d, 0x42, 0x7d, 0x5c, 0x05, 0x98, 0x9d, 0xac, 0x4f, 0x3c, 0x92,
-	0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c,
-	0x96, 0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x81, 0x4b, 0x38, 0x33, 0x5f, 0xaf, 0x24, 0x35, 0xb7, 0x20,
-	0xbf, 0x28, 0x31, 0x47, 0x0f, 0xea, 0x18, 0x27, 0xae, 0x00, 0x90, 0xe3, 0xfc, 0x12, 0x73, 0x53,
-	0x8b, 0x03, 0x18, 0x93, 0xd8, 0xc0, 0x4e, 0x35, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xbe, 0x1a,
-	0x6c, 0x92, 0xbb, 0x00, 0x00, 0x00,
+	0xe2, 0x83, 0x9d, 0x3d, 0x5c, 0x5d, 0x42, 0x7d, 0x5c, 0x05, 0x98, 0x95, 0x2c, 0xb9, 0x58, 0x9c,
+	0x32, 0x8b, 0x52, 0x94, 0x0c, 0xf1, 0x98, 0xe5, 0xe4, 0x13, 0xea, 0xea, 0xe5, 0x18, 0x29, 0xc0,
+	0x08, 0xe2, 0x38, 0x7b, 0x78, 0x3a, 0x7b, 0xbb, 0xfa, 0x09, 0x30, 0x39, 0x59, 0x9f, 0x78, 0x24,
+	0xc7, 0x78, 0xe1, 0x91, 0x1c, 0xe3, 0x83, 0x47, 0x72, 0x8c, 0x13, 0x1e, 0xcb, 0x31, 0x5c, 0x78,
+	0x2c, 0xc7, 0x70, 0xe3, 0xb1, 0x1c, 0x03, 0x97, 0x70, 0x66, 0xbe, 0x5e, 0x49, 0x6a, 0x6e, 0x41,
+	0x7e, 0x51, 0x62, 0x8e, 0x1e, 0xd4, 0x1f, 0x4e, 0x5c, 0x01, 0x20, 0x7f, 0xf9, 0x25, 0xe6, 0xa6,
+	0x16, 0x07, 0x30, 0x26, 0xb1, 0x81, 0x7d, 0x69, 0x0c, 0x08, 0x00, 0x00, 0xff, 0xff, 0x2b, 0xe4,
+	0x0d, 0xd2, 0xf6, 0x00, 0x00, 0x00,
 }
 
 func (m *ContinueAsNewInitiator) Marshal() (dAtA []byte, err error) {
@@ -136,6 +204,29 @@ func (m *ContinueAsNewInitiator) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
+func (m *Bird) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Bird) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Bird) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintOption2(dAtA []byte, offset int, v uint64) int {
 	offset -= sovOption2(v)
 	base := offset
@@ -148,6 +239,15 @@ func encodeVarintOption2(dAtA []byte, offset int, v uint64) int {
 	return base
 }
 func (m *ContinueAsNewInitiator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *Bird) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -189,6 +289,59 @@ func (m *ContinueAsNewInitiator) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: ContinueAsNewInitiator: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipOption2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthOption2
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthOption2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Bird) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowOption2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Bird: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Bird: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='option1',
   syntax='proto3',
   serialized_options=b'\n\023io.temporal.option1B\nProtoNamesP\001',
-  serialized_pb=b'\n\roption1.proto\x12\x07option1*n\n\x16\x43ontinueAsNewInitiator\x12)\n%CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED\x10\x00\x12\x0b\n\x07\x44\x45\x43IDER\x10\x01\x12\t\n\x05RETRY\x10\x02\x12\x11\n\rCRON_SCHEDULE\x10\x03\x42#\n\x13io.temporal.option1B\nProtoNamesP\x01\x62\x06proto3'
+  serialized_pb=b'\n\roption1.proto\x12\x07option1*n\n\x16\x43ontinueAsNewInitiator\x12)\n%CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED\x10\x00\x12\x0b\n\x07\x44\x45\x43IDER\x10\x01\x12\t\n\x05RETRY\x10\x02\x12\x11\n\rCRON_SCHEDULE\x10\x03*6\n\x04\x42ird\x12\x14\n\x10\x42IRD_UNSPECIFIED\x10\x00\x12\x0b\n\x07\x42LUEJAY\x10\x01\x12\x0b\n\x07\x43HICKEN\x10\x02\x42#\n\x13io.temporal.option1B\nProtoNamesP\x01\x62\x06proto3'
 )
 
 _CONTINUEASNEWINITIATOR = _descriptor.EnumDescriptor(
@@ -53,13 +53,44 @@ _CONTINUEASNEWINITIATOR = _descriptor.EnumDescriptor(
 _sym_db.RegisterEnumDescriptor(_CONTINUEASNEWINITIATOR)
 
 ContinueAsNewInitiator = enum_type_wrapper.EnumTypeWrapper(_CONTINUEASNEWINITIATOR)
+_BIRD = _descriptor.EnumDescriptor(
+  name='Bird',
+  full_name='option1.Bird',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='BIRD_UNSPECIFIED', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='BLUEJAY', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CHICKEN', index=2, number=2,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=138,
+  serialized_end=192,
+)
+_sym_db.RegisterEnumDescriptor(_BIRD)
+
+Bird = enum_type_wrapper.EnumTypeWrapper(_BIRD)
 CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED = 0
 DECIDER = 1
 RETRY = 2
 CRON_SCHEDULE = 3
+BIRD_UNSPECIFIED = 0
+BLUEJAY = 1
+CHICKEN = 2
 
 
 DESCRIPTOR.enum_types_by_name['ContinueAsNewInitiator'] = _CONTINUEASNEWINITIATOR
+DESCRIPTOR.enum_types_by_name['Bird'] = _BIRD
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 

@@ -11,9 +11,15 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :CONTINUE_AS_NEW_INITIATOR_RETRY, 2
       value :CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE, 3
     end
+    add_enum "option3.Bird" do
+      value :BIRD_UNSPECIFIED, 0
+      value :BIRD_BLUEJAY, 1
+      value :BIRD_CHICKEN, 2
+    end
   end
 end
 
 module Option3
   ContinueAsNewInitiator = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("option3.ContinueAsNewInitiator").enummodule
+  Bird = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("option3.Bird").enummodule
 end

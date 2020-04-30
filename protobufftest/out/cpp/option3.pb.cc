@@ -17,7 +17,7 @@
 namespace option3 {
 }  // namespace option3
 static constexpr ::PROTOBUF_NAMESPACE_ID::Metadata* file_level_metadata_option3_2eproto = nullptr;
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_option3_2eproto[1];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_option3_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_option3_2eproto = nullptr;
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_option3_2eproto::offsets[1] = {};
 static constexpr ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema* schemas = nullptr;
@@ -29,8 +29,10 @@ const char descriptor_table_protodef_option3_2eproto[] PROTOBUF_SECTION_VARIABLE
   "_UNSPECIFIED\020\000\022%\n!CONTINUE_AS_NEW_INITIA"
   "TOR_DECIDER\020\001\022#\n\037CONTINUE_AS_NEW_INITIAT"
   "OR_RETRY\020\002\022+\n\'CONTINUE_AS_NEW_INITIATOR_"
-  "CRON_SCHEDULE\020\003B#\n\023io.temporal.option3B\n"
-  "ProtoNamesP\001b\006proto3"
+  "CRON_SCHEDULE\020\003*@\n\004Bird\022\024\n\020BIRD_UNSPECIF"
+  "IED\020\000\022\020\n\014BIRD_BLUEJAY\020\001\022\020\n\014BIRD_CHICKEN\020"
+  "\002B#\n\023io.temporal.option3B\nProtoNamesP\001b\006"
+  "proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_option3_2eproto_deps[1] = {
 };
@@ -39,7 +41,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_opt
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_option3_2eproto_once;
 static bool descriptor_table_option3_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_option3_2eproto = {
-  &descriptor_table_option3_2eproto_initialized, descriptor_table_protodef_option3_2eproto, "option3.proto", 260,
+  &descriptor_table_option3_2eproto_initialized, descriptor_table_protodef_option3_2eproto, "option3.proto", 326,
   &descriptor_table_option3_2eproto_once, descriptor_table_option3_2eproto_sccs, descriptor_table_option3_2eproto_deps, 0, 0,
   schemas, file_default_instances, TableStruct_option3_2eproto::offsets,
   file_level_metadata_option3_2eproto, 0, file_level_enum_descriptors_option3_2eproto, file_level_service_descriptors_option3_2eproto,
@@ -58,6 +60,21 @@ bool ContinueAsNewInitiator_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Bird_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_option3_2eproto);
+  return file_level_enum_descriptors_option3_2eproto[1];
+}
+bool Bird_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
       return true;
     default:
       return false;

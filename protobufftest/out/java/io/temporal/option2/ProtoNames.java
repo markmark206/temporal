@@ -19,6 +19,11 @@ public final class ProtoNames {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_option2_ContinueAsNewInitiator_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_option2_Bird_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_option2_Bird_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -30,9 +35,10 @@ public final class ProtoNames {
     java.lang.String[] descriptorData = {
       "\n\roption2.proto\022\007option2\"\\\n\026ContinueAsNe" +
       "wInitiator\"B\n\004Enum\022\017\n\013UNSPECIFIED\020\000\022\013\n\007D" +
-      "ECIDER\020\001\022\t\n\005RETRY\020\002\022\021\n\rCRON_SCHEDULE\020\003B#" +
-      "\n\023io.temporal.option2B\nProtoNamesP\001b\006pro" +
-      "to3"
+      "ECIDER\020\001\022\t\n\005RETRY\020\002\022\021\n\rCRON_SCHEDULE\020\003\"9" +
+      "\n\004Bird\"1\n\004Enum\022\017\n\013UNSPECIFIED\020\000\022\013\n\007BLUEJ" +
+      "AY\020\001\022\013\n\007CHICKEN\020\002B#\n\023io.temporal.option2" +
+      "B\nProtoNamesP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -43,6 +49,12 @@ public final class ProtoNames {
     internal_static_option2_ContinueAsNewInitiator_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_option2_ContinueAsNewInitiator_descriptor,
+        new java.lang.String[] { });
+    internal_static_option2_Bird_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_option2_Bird_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_option2_Bird_descriptor,
         new java.lang.String[] { });
   }
 

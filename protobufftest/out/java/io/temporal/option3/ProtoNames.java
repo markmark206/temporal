@@ -28,8 +28,10 @@ public final class ProtoNames {
       "_UNSPECIFIED\020\000\022%\n!CONTINUE_AS_NEW_INITIA" +
       "TOR_DECIDER\020\001\022#\n\037CONTINUE_AS_NEW_INITIAT" +
       "OR_RETRY\020\002\022+\n\'CONTINUE_AS_NEW_INITIATOR_" +
-      "CRON_SCHEDULE\020\003B#\n\023io.temporal.option3B\n" +
-      "ProtoNamesP\001b\006proto3"
+      "CRON_SCHEDULE\020\003*@\n\004Bird\022\024\n\020BIRD_UNSPECIF" +
+      "IED\020\000\022\020\n\014BIRD_BLUEJAY\020\001\022\020\n\014BIRD_CHICKEN\020" +
+      "\002B#\n\023io.temporal.option3B\nProtoNamesP\001b\006" +
+      "proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

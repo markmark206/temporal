@@ -48,7 +48,7 @@ struct TableStruct_option2_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[1]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -56,11 +56,15 @@ struct TableStruct_option2_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_option2_2eproto;
 namespace option2 {
+class Bird;
+class BirdDefaultTypeInternal;
+extern BirdDefaultTypeInternal _Bird_default_instance_;
 class ContinueAsNewInitiator;
 class ContinueAsNewInitiatorDefaultTypeInternal;
 extern ContinueAsNewInitiatorDefaultTypeInternal _ContinueAsNewInitiator_default_instance_;
 }  // namespace option2
 PROTOBUF_NAMESPACE_OPEN
+template<> ::option2::Bird* Arena::CreateMaybeMessage<::option2::Bird>(Arena*);
 template<> ::option2::ContinueAsNewInitiator* Arena::CreateMaybeMessage<::option2::ContinueAsNewInitiator>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace option2 {
@@ -91,6 +95,32 @@ inline bool ContinueAsNewInitiator_Enum_Parse(
     const std::string& name, ContinueAsNewInitiator_Enum* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ContinueAsNewInitiator_Enum>(
     ContinueAsNewInitiator_Enum_descriptor(), name, value);
+}
+enum Bird_Enum : int {
+  Bird_Enum_UNSPECIFIED = 0,
+  Bird_Enum_BLUEJAY = 1,
+  Bird_Enum_CHICKEN = 2,
+  Bird_Enum_Bird_Enum_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  Bird_Enum_Bird_Enum_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool Bird_Enum_IsValid(int value);
+constexpr Bird_Enum Bird_Enum_Enum_MIN = Bird_Enum_UNSPECIFIED;
+constexpr Bird_Enum Bird_Enum_Enum_MAX = Bird_Enum_CHICKEN;
+constexpr int Bird_Enum_Enum_ARRAYSIZE = Bird_Enum_Enum_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Bird_Enum_descriptor();
+template<typename T>
+inline const std::string& Bird_Enum_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, Bird_Enum>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function Bird_Enum_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    Bird_Enum_descriptor(), enum_t_value);
+}
+inline bool Bird_Enum_Parse(
+    const std::string& name, Bird_Enum* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Bird_Enum>(
+    Bird_Enum_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -241,6 +271,153 @@ class ContinueAsNewInitiator :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_option2_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Bird :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:option2.Bird) */ {
+ public:
+  Bird();
+  virtual ~Bird();
+
+  Bird(const Bird& from);
+  Bird(Bird&& from) noexcept
+    : Bird() {
+    *this = ::std::move(from);
+  }
+
+  inline Bird& operator=(const Bird& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Bird& operator=(Bird&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Bird& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Bird* internal_default_instance() {
+    return reinterpret_cast<const Bird*>(
+               &_Bird_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(Bird& a, Bird& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Bird* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Bird* New() const final {
+    return CreateMaybeMessage<Bird>(nullptr);
+  }
+
+  Bird* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Bird>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Bird& from);
+  void MergeFrom(const Bird& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Bird* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "option2.Bird";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_option2_2eproto);
+    return ::descriptor_table_option2_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  typedef Bird_Enum Enum;
+  static constexpr Enum UNSPECIFIED =
+    Bird_Enum_UNSPECIFIED;
+  static constexpr Enum BLUEJAY =
+    Bird_Enum_BLUEJAY;
+  static constexpr Enum CHICKEN =
+    Bird_Enum_CHICKEN;
+  static inline bool Enum_IsValid(int value) {
+    return Bird_Enum_IsValid(value);
+  }
+  static constexpr Enum Enum_MIN =
+    Bird_Enum_Enum_MIN;
+  static constexpr Enum Enum_MAX =
+    Bird_Enum_Enum_MAX;
+  static constexpr int Enum_ARRAYSIZE =
+    Bird_Enum_Enum_ARRAYSIZE;
+  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+  Enum_descriptor() {
+    return Bird_Enum_descriptor();
+  }
+  template<typename T>
+  static inline const std::string& Enum_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, Enum>::value ||
+      ::std::is_integral<T>::value,
+      "Incorrect type passed to function Enum_Name.");
+    return Bird_Enum_Name(enum_t_value);
+  }
+  static inline bool Enum_Parse(const std::string& name,
+      Enum* value) {
+    return Bird_Enum_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:option2.Bird)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_option2_2eproto;
+};
 // ===================================================================
 
 
@@ -252,9 +429,15 @@ class ContinueAsNewInitiator :
 #endif  // __GNUC__
 // ContinueAsNewInitiator
 
+// -------------------------------------------------------------------
+
+// Bird
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -266,6 +449,11 @@ template <> struct is_proto_enum< ::option2::ContinueAsNewInitiator_Enum> : ::st
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::option2::ContinueAsNewInitiator_Enum>() {
   return ::option2::ContinueAsNewInitiator_Enum_descriptor();
+}
+template <> struct is_proto_enum< ::option2::Bird_Enum> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::option2::Bird_Enum>() {
+  return ::option2::Bird_Enum_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

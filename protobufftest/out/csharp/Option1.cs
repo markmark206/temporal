@@ -27,11 +27,12 @@ namespace Option1 {
             "Cg1vcHRpb24xLnByb3RvEgdvcHRpb24xKm4KFkNvbnRpbnVlQXNOZXdJbml0",
             "aWF0b3ISKQolQ09OVElOVUVfQVNfTkVXX0lOSVRJQVRPUl9VTlNQRUNJRklF",
             "RBAAEgsKB0RFQ0lERVIQARIJCgVSRVRSWRACEhEKDUNST05fU0NIRURVTEUQ",
-            "A0IjChNpby50ZW1wb3JhbC5vcHRpb24xQgpQcm90b05hbWVzUAFiBnByb3Rv",
-            "Mw=="));
+            "Ayo2CgRCaXJkEhQKEEJJUkRfVU5TUEVDSUZJRUQQABILCgdCTFVFSkFZEAES",
+            "CwoHQ0hJQ0tFThACQiMKE2lvLnRlbXBvcmFsLm9wdGlvbjFCClByb3RvTmFt",
+            "ZXNQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Option1.ContinueAsNewInitiator), }, null, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Option1.ContinueAsNewInitiator), typeof(global::Option1.Bird), }, null, null));
     }
     #endregion
 
@@ -42,6 +43,12 @@ namespace Option1 {
     [pbr::OriginalName("DECIDER")] Decider = 1,
     [pbr::OriginalName("RETRY")] Retry = 2,
     [pbr::OriginalName("CRON_SCHEDULE")] CronSchedule = 3,
+  }
+
+  public enum Bird {
+    [pbr::OriginalName("BIRD_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("BLUEJAY")] Bluejay = 1,
+    [pbr::OriginalName("CHICKEN")] Chicken = 2,
   }
 
   #endregion

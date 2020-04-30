@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='option2',
   syntax='proto3',
   serialized_options=b'\n\023io.temporal.option2B\nProtoNamesP\001',
-  serialized_pb=b'\n\roption2.proto\x12\x07option2\"\\\n\x16\x43ontinueAsNewInitiator\"B\n\x04\x45num\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0b\n\x07\x44\x45\x43IDER\x10\x01\x12\t\n\x05RETRY\x10\x02\x12\x11\n\rCRON_SCHEDULE\x10\x03\x42#\n\x13io.temporal.option2B\nProtoNamesP\x01\x62\x06proto3'
+  serialized_pb=b'\n\roption2.proto\x12\x07option2\"\\\n\x16\x43ontinueAsNewInitiator\"B\n\x04\x45num\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0b\n\x07\x44\x45\x43IDER\x10\x01\x12\t\n\x05RETRY\x10\x02\x12\x11\n\rCRON_SCHEDULE\x10\x03\"9\n\x04\x42ird\"1\n\x04\x45num\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0b\n\x07\x42LUEJAY\x10\x01\x12\x0b\n\x07\x43HICKEN\x10\x02\x42#\n\x13io.temporal.option2B\nProtoNamesP\x01\x62\x06proto3'
 )
 
 
@@ -53,6 +53,32 @@ _CONTINUEASNEWINITIATOR_ENUM = _descriptor.EnumDescriptor(
 )
 _sym_db.RegisterEnumDescriptor(_CONTINUEASNEWINITIATOR_ENUM)
 
+_BIRD_ENUM = _descriptor.EnumDescriptor(
+  name='Enum',
+  full_name='option2.Bird.Enum',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='UNSPECIFIED', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='BLUEJAY', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CHICKEN', index=2, number=2,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=128,
+  serialized_end=177,
+)
+_sym_db.RegisterEnumDescriptor(_BIRD_ENUM)
+
 
 _CONTINUEASNEWINITIATOR = _descriptor.Descriptor(
   name='ContinueAsNewInitiator',
@@ -78,8 +104,35 @@ _CONTINUEASNEWINITIATOR = _descriptor.Descriptor(
   serialized_end=118,
 )
 
+
+_BIRD = _descriptor.Descriptor(
+  name='Bird',
+  full_name='option2.Bird',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _BIRD_ENUM,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=120,
+  serialized_end=177,
+)
+
 _CONTINUEASNEWINITIATOR_ENUM.containing_type = _CONTINUEASNEWINITIATOR
+_BIRD_ENUM.containing_type = _BIRD
 DESCRIPTOR.message_types_by_name['ContinueAsNewInitiator'] = _CONTINUEASNEWINITIATOR
+DESCRIPTOR.message_types_by_name['Bird'] = _BIRD
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ContinueAsNewInitiator = _reflection.GeneratedProtocolMessageType('ContinueAsNewInitiator', (_message.Message,), {
@@ -88,6 +141,13 @@ ContinueAsNewInitiator = _reflection.GeneratedProtocolMessageType('ContinueAsNew
   # @@protoc_insertion_point(class_scope:option2.ContinueAsNewInitiator)
   })
 _sym_db.RegisterMessage(ContinueAsNewInitiator)
+
+Bird = _reflection.GeneratedProtocolMessageType('Bird', (_message.Message,), {
+  'DESCRIPTOR' : _BIRD,
+  '__module__' : 'option2_pb2'
+  # @@protoc_insertion_point(class_scope:option2.Bird)
+  })
+_sym_db.RegisterMessage(Bird)
 
 
 DESCRIPTOR._options = None
