@@ -48,13 +48,13 @@ Criteria for evaluation:
   Option 1 is probably least typing in .proto
 
 * What causes the most consistent / cleanest client code? 
--   golang?
+    -   golang?
 
-option 2 and option 3
+        option 2 and option 3
 
--   java?
+    -   java?
 
-no idea.
+        no idea.
 
 
 # This dev's recommendation
