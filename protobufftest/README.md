@@ -27,7 +27,7 @@ Assuming tooling is installed on the machine, these artifacts can be recreated b
 Criteria for evaluation: 
 * What makes linters happy? (out of the box)
 
-  Bth linters are immediately happy with Option 3
+  Both linters are immediately happy with Option 3
 
 * What is linter enforcable? (out of the box)
   
