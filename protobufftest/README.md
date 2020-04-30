@@ -9,6 +9,8 @@ Here are some experinments around compiling proto buffs around the following thr
 
 [Option 3](./option3.proto): Follow Googles style guidelines, and prefix all enum values with type name. (https://developers.google.com/protocol-buffers/docs/style#enums)
 
+[Option 3a](./option3.proto): Same as # 3 above, and strip redundant prefixes from the generated `*.pb.go` files (via `--gogoslick`).
+
 
 # Where are the artifacts?
 
