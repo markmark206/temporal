@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package option2;
+
+option java_package = "io.temporal.option2";
+option java_outer_classname = "ProtoNames";
+option java_multiple_files = true;
+
+
+message ContinueAsNewInitiator {
+    enum Enum{
+        UNSPECIFIED = 0;
+        DECIDER = 1;
+        RETRY = 2;
+        CRON_SCHEDULE = 3;
+    }
+}
