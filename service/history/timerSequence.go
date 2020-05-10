@@ -51,9 +51,9 @@ const (
 )
 
 const (
-	// activity / user timer task not created
-	timerTaskStatusNone = iota
-	timerTaskStatusCreated
+// activity / user timer task not created
+// timerTaskStatusNone = iota
+// timerTaskStatusCreated
 )
 
 const (
@@ -134,7 +134,7 @@ func (t *timerSequenceImpl) createNextUserTimer() (bool, error) {
 	}
 	// mark timer task mask as indication that timer task is generated
 	// here TaskID is misleading attr, should be called timer created flag or something
-	timerInfo.TaskStatus = timerTaskStatusCreated
+	timerInfo.TaskStatus = persistenceblobs.TimerTaskStatus1_timerTaskStatusCreated
 	if err := t.mutableState.UpdateUserTimer(timerInfo); err != nil {
 		return false, err
 	}

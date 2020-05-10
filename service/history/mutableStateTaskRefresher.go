@@ -32,6 +32,8 @@ import (
 	executionpb "go.temporal.io/temporal-proto/execution"
 	"go.temporal.io/temporal-proto/serviceerror"
 
+	"github.com/temporalio/temporal/.gen/proto/persistenceblobs"
+
 	"github.com/temporalio/temporal/common"
 	"github.com/temporalio/temporal/common/cache"
 	"github.com/temporalio/temporal/common/clock"
@@ -284,7 +286,7 @@ func (r *mutableStateTaskRefresherImpl) refreshTasksForActivity(
 Loop:
 	for _, activityInfo := range pendingActivityInfos {
 		// clear all activity timer task mask for later activity timer task re-generation
-		activityInfo.TimerTaskStatus = timerTaskStatusNone
+		activityInfo.TimerTaskStatus = persistenceblobs.TimerTaskStatus1_timerTaskStatusNone
 
 		// need to update activity timer task mask for which task is generated
 		if err := mutableState.UpdateActivity(
@@ -337,7 +339,7 @@ func (r *mutableStateTaskRefresherImpl) refreshTasksForTimer(
 
 	for _, timerInfo := range pendingTimerInfos {
 		// clear all timer task mask for later timer task re-generation
-		timerInfo.TaskStatus = timerTaskStatusNone
+		timerInfo.TaskStatus = persistenceblobs.TimerTaskStatus1_timerTaskStatusNone
 
 		// need to update user timer task mask for which task is generated
 		if err := mutableState.UpdateUserTimer(

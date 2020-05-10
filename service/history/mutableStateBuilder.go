@@ -1343,7 +1343,7 @@ func (e *mutableStateBuilder) ReplicateActivityInfo(
 	ai.LastFailureDetails = request.GetLastFailureDetails()
 
 	if resetActivityTimerTaskStatus {
-		ai.TimerTaskStatus = timerTaskStatusNone
+		ai.TimerTaskStatus = persistenceblobs.TimerTaskStatus1_timerTaskStatusNone
 	}
 
 	e.updateActivityInfos[ai] = struct{}{}
@@ -2210,7 +2210,7 @@ func (e *mutableStateBuilder) ReplicateActivityTaskScheduledEvent(
 		CancelRequested:          false,
 		CancelRequestID:          common.EmptyEventID,
 		LastHeartBeatUpdatedTime: time.Time{},
-		TimerTaskStatus:          timerTaskStatusNone,
+		TimerTaskStatus:          persistenceblobs.TimerTaskStatus1_timerTaskStatusNone,
 		TaskList:                 attributes.TaskList.GetName(),
 		HasRetryPolicy:           attributes.RetryPolicy != nil,
 	}
@@ -3112,7 +3112,7 @@ func (e *mutableStateBuilder) ReplicateTimerStartedEvent(
 		TimerId:    timerID,
 		ExpiryTime: expiryTime,
 		StartedId:  event.GetEventId(),
-		TaskStatus: timerTaskStatusNone,
+		TaskStatus: persistenceblobs.TimerTaskStatus1_timerTaskStatusNone,
 	}
 
 	e.pendingTimerInfoIDs[timerID] = ti
@@ -3836,7 +3836,7 @@ func (e *mutableStateBuilder) RetryActivity(
 	ai.StartedID = common.EmptyEventID
 	ai.RequestID = ""
 	ai.StartedTime = time.Time{}
-	ai.TimerTaskStatus = timerTaskStatusNone
+	ai.TimerTaskStatus = persistenceblobs.TimerTaskStatus1_timerTaskStatusNone
 	ai.LastFailureReason = failureReason
 	ai.LastWorkerIdentity = ai.StartedIdentity
 	ai.LastFailureDetails = failureDetails
