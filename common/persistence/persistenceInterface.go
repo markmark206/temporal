@@ -304,7 +304,7 @@ type (
 		CancelRequested          bool
 		CancelRequestID          int64
 		LastHeartBeatUpdatedTime time.Time
-		TimerTaskStatus          int32
+		TimerTaskStatus          persistenceblobs.TimerTaskStatusE
 		// For retry
 		Attempt            int32
 		NamespaceID        primitives.UUID
