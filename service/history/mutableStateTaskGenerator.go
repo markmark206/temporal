@@ -34,6 +34,8 @@ import (
 	eventpb "go.temporal.io/temporal-proto/event"
 	"go.temporal.io/temporal-proto/serviceerror"
 
+	"github.com/temporalio/temporal/.gen/proto/persistenceblobs"
+
 	"github.com/temporalio/temporal/common/cache"
 	"github.com/temporalio/temporal/common/clock"
 	"github.com/temporalio/temporal/common/log"
@@ -197,13 +199,13 @@ func (r *mutableStateTaskGeneratorImpl) generateDelayedDecisionTasks(
 	decisionBackoffDuration := time.Duration(startAttr.GetFirstDecisionTaskBackoffSeconds()) * time.Second
 	executionTimestamp := now.Add(decisionBackoffDuration)
 
-	var firstDecisionDelayType int
+	var firstDecisionDelayType persistenceblobs.TimeoutTypeLunchDish
 	switch startAttr.GetInitiator() {
 	case commonpb.ContinueAsNewInitiator_Retry:
-		firstDecisionDelayType = persistence.WorkflowBackoffTimeoutTypeRetry
+		firstDecisionDelayType = persistenceblobs.TimeoutTypeLunchDish_WorkflowBackoffTimeoutTypeRetry
 	case commonpb.ContinueAsNewInitiator_CronSchedule,
 		commonpb.ContinueAsNewInitiator_Decider:
-		firstDecisionDelayType = persistence.WorkflowBackoffTimeoutTypeCron
+		firstDecisionDelayType = persistenceblobs.TimeoutTypeLunchDish_WorkflowBackoffTimeoutTypeCron
 	default:
 		return serviceerror.NewInternal(fmt.Sprintf("unknown iterator retry policy: %v", startAttr.GetInitiator()))
 	}
@@ -266,7 +268,7 @@ func (r *mutableStateTaskGeneratorImpl) generateDecisionScheduleTasks(
 		r.mutableState.AddTimerTasks(&persistence.DecisionTimeoutTask{
 			// TaskID is set by shard
 			VisibilityTimestamp: scheduledTime.Add(scheduleToStartTimeout),
-			TimeoutType:         int(timerTypeScheduleToStart),
+			TimeoutType:         eventTimeoutTypeToLunch(eventpb.TimeoutType_StartToClose),
 			EventID:             decision.ScheduleID,
 			ScheduleAttempt:     decision.Attempt,
 			Version:             decision.Version,
@@ -274,6 +276,25 @@ func (r *mutableStateTaskGeneratorImpl) generateDecisionScheduleTasks(
 	}
 
 	return nil
+}
+
+func eventTimeoutTypeToLunch(tt eventpb.TimeoutType) persistenceblobs.TimeoutTypeLunchDish {
+	switch tt {
+	case eventpb.TimeoutType_StartToClose:
+		{
+			return persistenceblobs.TimeoutTypeLunchDish_Pho
+		}
+		//	case eventpb.TimeoutType_StartToClose:
+		//		{
+		//			return persistenceblobs.TimeoutTypeLunchDish_Pho
+		//		}
+
+	default:
+		{
+
+			return persistenceblobs.TimeoutTypeLunchDish_Pho
+		}
+	}
 }
 
 func (r *mutableStateTaskGeneratorImpl) generateDecisionStartTasks(
@@ -296,7 +317,7 @@ func (r *mutableStateTaskGeneratorImpl) generateDecisionStartTasks(
 	r.mutableState.AddTimerTasks(&persistence.DecisionTimeoutTask{
 		// TaskID is set by shard
 		VisibilityTimestamp: startedTime.Add(startToCloseTimeout),
-		TimeoutType:         int(timerTypeStartToClose),
+		TimeoutType:         eventTimeoutTypeToLunch(eventpb.TimeoutType_StartToClose),
 		EventID:             decision.ScheduleID,
 		ScheduleAttempt:     decision.Attempt,
 		Version:             decision.Version,

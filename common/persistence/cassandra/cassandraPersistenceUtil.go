@@ -891,7 +891,7 @@ func createTimerTasks(
 		var eventID int64
 		var attempt int64
 
-		timeoutType := 0
+		var timeoutType persistenceblobs.TimeoutTypeLunchDish
 
 		switch t := task.(type) {
 		case *p.DecisionTimeoutTask:
@@ -939,7 +939,7 @@ func createTimerTasks(
 			WorkflowId:          workflowID,
 			RunId:               runID,
 			TaskType:            task.GetType(),
-			TimeoutType:         int32(timeoutType),
+			TimeoutType:         timeoutType,
 			Version:             task.GetVersion(),
 			ScheduleAttempt:     attempt,
 			EventId:             eventID,

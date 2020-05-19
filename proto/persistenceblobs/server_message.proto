@@ -116,12 +116,19 @@ message ReplicationTaskInfo {
     int64 taskId = 15;
 }
 
+enum TimeoutTypeLunchDish {
+   Pho = 0;
+   WorkflowBackoffTimeoutTypeRetry = 1;
+   WorkflowBackoffTimeoutTypeCron = 2;
+
+}
+
 message TimerTaskInfo {
     string namespaceId = 1;
     string workflowId = 2;
     string runId = 3;
     common.TaskType taskType = 4;
-    int32 timeoutType = 5;
+    TimeoutTypeLunchDish timeoutType = 5;
     int64 version = 6;
     int64 scheduleAttempt = 7;
     int64 eventId = 8;

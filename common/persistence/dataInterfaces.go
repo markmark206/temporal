@@ -122,10 +122,10 @@ const (
 const UnknownNumRowsAffected = -1
 
 // Types of workflow backoff timeout
-const (
-	WorkflowBackoffTimeoutTypeRetry = iota
-	WorkflowBackoffTimeoutTypeCron
-)
+// const (
+//	WorkflowBackoffTimeoutTypeRetry = iota
+//	WorkflowBackoffTimeoutTypeCron
+//)
 
 const (
 	// InitialFailoverNotificationVersion is the initial failover version for a namespace
@@ -365,7 +365,7 @@ type (
 		TaskID              int64
 		EventID             int64
 		ScheduleAttempt     int64
-		TimeoutType         int
+		TimeoutType         persistenceblobs.TimeoutTypeLunchDish
 		Version             int64
 	}
 
@@ -423,7 +423,7 @@ type (
 	ActivityTimeoutTask struct {
 		VisibilityTimestamp time.Time
 		TaskID              int64
-		TimeoutType         int
+		TimeoutType         persistenceblobs.TimeoutTypeLunchDish
 		EventID             int64
 		Attempt             int64
 		Version             int64
@@ -452,7 +452,7 @@ type (
 		TaskID              int64
 		EventID             int64 // TODO this attribute is not used?
 		Version             int64
-		TimeoutType         int // 0 for retry, 1 for cron.
+		TimeoutType         persistenceblobs.TimeoutTypeLunchDish // 0 for retry, 1 for cron.
 	}
 
 	// HistoryReplicationTask is the replication task created for shipping history replication events to other clusters
