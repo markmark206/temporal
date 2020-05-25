@@ -25,8 +25,9 @@ package common;
 option go_package = "github.com/temporalio/temporal/.gen/proto/common";
 
 enum DLQType {
-    Replication = 0;
-    Namespace = 1;
+    DLQType_Unspecified = 0;
+    Replication = 1;
+    Namespace = 2;
 }
 
 // TaskSource is the source from which a task was produced.
@@ -47,24 +48,25 @@ enum TaskCategory {
 }
 
 enum TaskType {
-    ReplicationHistory = 0;
-    ReplicationSyncActivity = 1;
+    TaskType_Unspecified = 0;
+    ReplicationHistory = 1;
+    ReplicationSyncActivity = 2;
 
-    TransferDecisionTask = 2;
-    TransferActivityTask = 3;
-    TransferCloseExecution = 4;
-    TransferCancelExecution = 5;
-    TransferStartChildExecution = 6;
-    TransferSignalExecution = 7;
-    TransferRecordWorkflowStarted = 8;
-    TransferResetWorkflow = 9;
-    TransferUpsertWorkflowSearchAttributes = 10;
+    TransferDecisionTask = 3;
+    TransferActivityTask = 4;
+    TransferCloseExecution = 5;
+    TransferCancelExecution = 6;
+    TransferStartChildExecution = 7;
+    TransferSignalExecution = 8;
+    TransferRecordWorkflowStarted = 9;
+    TransferResetWorkflow = 10;
+    TransferUpsertWorkflowSearchAttributes = 11;
 
-    DecisionTimeout = 11;
-    ActivityTimeout = 12;
-    UserTimer = 13;
-    WorkflowRunTimeout = 14;
-    DeleteHistoryEvent = 15;
-    ActivityRetryTimer = 16;
-    WorkflowBackoffTimer = 17;
+    DecisionTimeout = 12;
+    ActivityTimeout = 13;
+    UserTimer = 14;
+    WorkflowRunTimeout = 15;
+    DeleteHistoryEvent = 16;
+    ActivityRetryTimer = 17;
+    WorkflowBackoffTimer = 18;
 }

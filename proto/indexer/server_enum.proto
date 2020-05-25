@@ -24,13 +24,15 @@ package indexer;
 option go_package = "github.com/temporalio/temporal/.gen/proto/indexer";
 
 enum MessageType {
-    Index = 0;
-    Delete = 1;
+    MessageType_Unspecified = 0;
+    Index = 1;
+    Delete = 2;
 }
 
 enum FieldType {
-    String = 0;
-    Int = 1;
-    Bool = 2;
-    Binary =3;
+    FieldType_Unspecified = 0;
+    String = 1;
+    Int = 2;
+    Bool = 3;
+    Binary = 4;
 }
