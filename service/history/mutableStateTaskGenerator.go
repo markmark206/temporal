@@ -30,6 +30,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/temporalio/temporal/.gen/proto/persistenceblobs"
+
 	commonpb "go.temporal.io/temporal-proto/common"
 	eventpb "go.temporal.io/temporal-proto/event"
 	"go.temporal.io/temporal-proto/serviceerror"
@@ -197,13 +199,13 @@ func (r *mutableStateTaskGeneratorImpl) generateDelayedDecisionTasks(
 	decisionBackoffDuration := time.Duration(startAttr.GetFirstDecisionTaskBackoffSeconds()) * time.Second
 	executionTimestamp := now.Add(decisionBackoffDuration)
 
-	var firstDecisionDelayType int
+	var firstDecisionDelayType persistenceblobs.MyTimeoutType
 	switch startAttr.GetInitiator() {
 	case commonpb.ContinueAsNewInitiator_Retry:
-		firstDecisionDelayType = persistence.WorkflowBackoffTimeoutTypeRetry
+		firstDecisionDelayType = persistenceblobs.MyTimeoutType_Retry
 	case commonpb.ContinueAsNewInitiator_CronSchedule,
 		commonpb.ContinueAsNewInitiator_Decider:
-		firstDecisionDelayType = persistence.WorkflowBackoffTimeoutTypeCron
+		firstDecisionDelayType = persistenceblobs.MyTimeoutType_Cron
 	default:
 		return serviceerror.NewInternal(fmt.Sprintf("unknown iterator retry policy: %v", startAttr.GetInitiator()))
 	}
@@ -212,8 +214,9 @@ func (r *mutableStateTaskGeneratorImpl) generateDelayedDecisionTasks(
 		// TaskID is set by shard
 		// TODO EventID seems not used at all
 		VisibilityTimestamp: executionTimestamp,
-		TimeoutType:         firstDecisionDelayType,
-		Version:             startVersion,
+		// markmark: rval is an int 0 or 1 (retry or cron)
+		TimeoutType: firstDecisionDelayType,
+		Version:     startVersion,
 	})
 
 	return nil
@@ -266,7 +269,7 @@ func (r *mutableStateTaskGeneratorImpl) generateDecisionScheduleTasks(
 		r.mutableState.AddTimerTasks(&persistence.DecisionTimeoutTask{
 			// TaskID is set by shard
 			VisibilityTimestamp: scheduledTime.Add(scheduleToStartTimeout),
-			TimeoutType:         int(timerTypeScheduleToStart),
+			TimeoutType:         persistenceblobs.MyTimeoutType_timerTypeScheduleToStart,
 			EventID:             decision.ScheduleID,
 			ScheduleAttempt:     decision.Attempt,
 			Version:             decision.Version,
@@ -296,7 +299,7 @@ func (r *mutableStateTaskGeneratorImpl) generateDecisionStartTasks(
 	r.mutableState.AddTimerTasks(&persistence.DecisionTimeoutTask{
 		// TaskID is set by shard
 		VisibilityTimestamp: startedTime.Add(startToCloseTimeout),
-		TimeoutType:         int(timerTypeStartToClose),
+		TimeoutType:         persistenceblobs.MyTimeoutType_timerTypeStartToClose,
 		EventID:             decision.ScheduleID,
 		ScheduleAttempt:     decision.Attempt,
 		Version:             decision.Version,

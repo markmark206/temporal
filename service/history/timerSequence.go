@@ -44,6 +44,7 @@ import (
 type timerType int32
 
 const (
+	// markmark:
 	timerTypeStartToClose    = timerType(commonpb.TimeoutType_StartToClose)
 	timerTypeScheduleToStart = timerType(commonpb.TimeoutType_ScheduleToStart)
 	timerTypeScheduleToClose = timerType(commonpb.TimeoutType_ScheduleToClose)

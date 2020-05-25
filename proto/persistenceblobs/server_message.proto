@@ -117,12 +117,22 @@ message ReplicationTaskInfo {
     int64 taskId = 15;
 }
 
+enum MyTimeoutType {
+  // MyTimeoutType_Unspecified = 0;
+  Retry = 0;
+  Cron = 1;
+  timerTypeStartToClose = 2;
+  timerTypeScheduleToStart = 3;
+  timerTypeScheduleToClose = 4;
+  timerTypeHeartbeat = 5;
+}
+
 message TimerTaskInfo {
     string namespaceId = 1;
     string workflowId = 2;
     string runId = 3;
     common.TaskType taskType = 4;
-    int32 timeoutType = 5;
+    MyTimeoutType timeoutType = 5;
     int64 version = 6;
     int64 scheduleAttempt = 7;
     int64 eventId = 8;

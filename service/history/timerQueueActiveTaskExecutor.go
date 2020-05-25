@@ -188,7 +188,7 @@ func (t *timerQueueActiveTaskExecutor) executeActivityTimeoutTask(
 	// one heartbeat task was persisted multiple times with different taskIDs due to the retry logic
 	// for updating workflow execution. In that case, only one new heartbeat timeout task should be
 	// created.
-	isHeartBeatTask := task.TimeoutType == int32(commonpb.TimeoutType_Heartbeat)
+	isHeartBeatTask := task.TimeoutType == int32(commonpb.TimeoutType_Heartbeat) // markmark: commonpb.TimeoutType_Heartbeat is a whole other space
 	activityInfo, ok := mutableState.GetActivityInfo(task.GetEventId())
 	goVisibilityTS, _ := types.TimestampFromProto(task.VisibilityTimestamp)
 	if isHeartBeatTask && ok && activityInfo.LastHeartbeatTimeoutVisibilityInSeconds <= goVisibilityTS.Unix() {

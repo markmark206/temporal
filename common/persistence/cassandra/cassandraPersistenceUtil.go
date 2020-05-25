@@ -891,7 +891,7 @@ func createTimerTasks(
 		var eventID int64
 		var attempt int64
 
-		timeoutType := 0
+		var timeoutType persistenceblobs.MyTimeoutType
 
 		switch t := task.(type) {
 		case *p.DecisionTimeoutTask:
@@ -913,6 +913,7 @@ func createTimerTasks(
 
 		case *p.WorkflowBackoffTimerTask:
 			eventID = t.EventID
+			// markmark: lval is an int, rval is MyTimeoutType
 			timeoutType = t.TimeoutType
 
 		case *p.WorkflowTimeoutTask:
@@ -939,7 +940,7 @@ func createTimerTasks(
 			WorkflowId:          workflowID,
 			RunId:               runID,
 			TaskType:            task.GetType(),
-			TimeoutType:         int32(timeoutType),
+			TimeoutType:         timeoutType,
 			Version:             task.GetVersion(),
 			ScheduleAttempt:     attempt,
 			EventId:             eventID,
