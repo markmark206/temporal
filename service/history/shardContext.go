@@ -927,6 +927,7 @@ func (s *shardContextImpl) renewRangeLocked(isStealing bool) error {
 	updatedShardInfo := copyShardInfo(s.shardInfo)
 	updatedShardInfo.RangeId++
 	if isStealing {
+		// markmark: this is an incrementable int32, not a proper enum.
 		updatedShardInfo.StolenSinceRenew++
 	}
 

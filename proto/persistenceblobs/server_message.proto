@@ -82,13 +82,17 @@ message ActivityInfo {
     google.protobuf.Timestamp lastHeartbeatUpdatedTime = 35;
 }
 
+enum StolenOrNot {
+    Chicken = 0;
+}
+
 message ShardInfo {
     int32 shardId = 1;
     int64 rangeId = 2;
     string owner = 3;
     int64 replicationAckLevel = 4;
     int64 transferAckLevel = 5;
-    int32 stolenSinceRenew = 6;
+    StolenOrNot stolenSinceRenew = 6;
     google.protobuf.Timestamp updatedAt = 7;
     google.protobuf.Timestamp timerAckLevel = 8;
     int64 namespaceNotificationVersion = 9;

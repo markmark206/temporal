@@ -119,7 +119,7 @@ func (s *ShardPersistenceSuite) TestUpdateShard() {
 	updatedRangeID := int64(142)
 	updatedTransferAckLevel := int64(1000)
 	updatedReplicationAckLevel := int64(2000)
-	updatedStolenSinceRenew := int32(10)
+	updatedStolenSinceRenew := persistenceblobs.StolenOrNot_Chicken // .int32(10)
 	updatedInfo := copyShardInfo(shardInfo)
 	updatedInfo.Owner = updatedOwner
 	updatedInfo.RangeId = updatedRangeID
