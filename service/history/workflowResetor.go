@@ -39,6 +39,8 @@ import (
 	"go.temporal.io/temporal-proto/serviceerror"
 	"go.temporal.io/temporal-proto/workflowservice"
 
+	"github.com/temporalio/temporal/.gen/proto/persistenceblobs"
+
 	"github.com/temporalio/temporal/.gen/proto/historyservice"
 	"github.com/temporalio/temporal/common"
 	"github.com/temporalio/temporal/common/cache"
@@ -569,7 +571,7 @@ func (w *workflowResetorImpl) generateTimerTasksForReset(
 	// user timer task
 	if len(msBuilder.GetPendingTimerInfos()) > 0 {
 		for _, timerInfo := range msBuilder.GetPendingTimerInfos() {
-			timerInfo.TaskStatus = timerTaskStatusNone
+			timerInfo.TaskStatus = persistenceblobs.TimerTaskStatus_TimerTaskStatus_None
 			if err := msBuilder.UpdateUserTimer(timerInfo); err != nil {
 				return nil, err
 			}
@@ -586,7 +588,7 @@ func (w *workflowResetorImpl) generateTimerTasksForReset(
 	// activity timer
 	if needActivityTimer {
 		for _, activityInfo := range msBuilder.GetPendingActivityInfos() {
-			activityInfo.TimerTaskStatus = timerTaskStatusNone
+			activityInfo.TimerTaskStatus = persistenceblobs.TimerTaskStatus_TimerTaskStatus_None
 			if err := msBuilder.UpdateActivity(activityInfo); err != nil {
 				return nil, err
 			}

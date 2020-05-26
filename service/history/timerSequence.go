@@ -50,11 +50,13 @@ const (
 	timerTypeHeartbeat       = timerType(commonpb.TimeoutType_Heartbeat)
 )
 
+/*
 const (
 	// activity / user timer task not created
 	timerTaskStatusNone = iota
 	timerTaskStatusCreated
 )
+*/
 
 const (
 	// activity timer task status
@@ -134,7 +136,7 @@ func (t *timerSequenceImpl) createNextUserTimer() (bool, error) {
 	}
 	// mark timer task mask as indication that timer task is generated
 	// here TaskID is misleading attr, should be called timer created flag or something
-	timerInfo.TaskStatus = timerTaskStatusCreated
+	timerInfo.TaskStatus = persistenceblobs.TimerTaskStatus_TimerTaskStatus_Created
 	if err := t.mutableState.UpdateUserTimer(timerInfo); err != nil {
 		return false, err
 	}
@@ -166,6 +168,7 @@ func (t *timerSequenceImpl) createNextActivityTimer() (bool, error) {
 		return false, serviceerror.NewInternal(fmt.Sprintf("unable to load activity info %v", firstTimerTask.eventID))
 	}
 	// mark timer task mask as indication that timer task is generated
+	// markmark: OR'ing things into timer task status
 	activityInfo.TimerTaskStatus |= timerTypeToTimerMask(firstTimerTask.timerType)
 	if firstTimerTask.timerType == timerTypeHeartbeat {
 		activityInfo.LastHeartbeatTimeoutVisibilityInSeconds = firstTimerTask.timestamp.Unix()
@@ -249,7 +252,7 @@ func (t *timerSequenceImpl) getUserTimerTimeout(
 		eventID:      timerInfo.GetStartedId(),
 		timestamp:    expiryTime,
 		timerType:    timerTypeStartToClose,
-		timerCreated: timerInfo.TaskStatus == timerTaskStatusCreated,
+		timerCreated: timerInfo.TaskStatus == persistenceblobs.TimerTaskStatus_TimerTaskStatus_Created,
 		attempt:      0,
 	}
 }

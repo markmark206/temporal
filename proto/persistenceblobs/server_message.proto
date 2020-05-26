@@ -62,7 +62,7 @@ message ActivityInfo {
     int32 heartbeatTimeoutSeconds = 15;
     bool cancelRequested = 16;
     int64 cancelRequestId = 17;
-    int32 timerTaskStatus = 18;
+    TimerTaskStatus timerTaskStatus = 18;
     int32 attempt = 19;
     string taskList = 20;
     string startedIdentity = 21;
@@ -172,11 +172,16 @@ message HistoryTreeInfo {
     string info = 3;
 }
 
+enum TimerTaskStatus {
+   TimerTaskStatus_None = 0;
+   TimerTaskStatus_Created = 1;
+}
+
 message TimerInfo {
     int64 version = 1;
     int64 startedId = 2;
     google.protobuf.Timestamp expiryTime = 3;
-    int64 taskStatus = 4;
+    TimerTaskStatus taskStatus = 4;
     // timerId serves the purpose of indicating whether a timer task is generated for this timer info.
     string timerId = 5;
 }
