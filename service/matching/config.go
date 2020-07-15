@@ -25,6 +25,7 @@
 package matching
 
 import (
+	"log"
 	"time"
 
 	"go.temporal.io/server/common"
@@ -47,6 +48,7 @@ type (
 		UpdateAckInterval            dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
 		IdleTaskqueueCheckInterval   dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
 		MaxTaskqueueIdleTime         dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
+		// markmark: number of partitions
 		NumTaskqueueWritePartitions  dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
 		NumTaskqueueReadPartitions   dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
 		ForwarderMaxOutstandingPolls dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
@@ -163,10 +165,14 @@ func newTaskQueueConfig(id *taskQueueID, config *Config, namespaceCache cache.Na
 			return config.MaxTaskBatchSize(namespace, taskQueueName, taskType)
 		},
 		NumWritePartitions: func() int {
-			return common.MaxInt(1, config.NumTaskqueueWritePartitions(namespace, taskQueueName, taskType))
+			result := common.MaxInt(1, config.NumTaskqueueWritePartitions(namespace, taskQueueName, taskType))
+			log.Printf("NumWritePartitions markmark: %d", result)
+			return result
 		},
 		NumReadPartitions: func() int {
-			return common.MaxInt(1, config.NumTaskqueueReadPartitions(namespace, taskQueueName, taskType))
+			result := common.MaxInt(1, config.NumTaskqueueReadPartitions(namespace, taskQueueName, taskType))
+			log.Printf("NumReadPartitions markmark: %d", result)
+			return result
 		},
 		forwarderConfig: forwarderConfig{
 			ForwarderMaxOutstandingPolls: func() int {
