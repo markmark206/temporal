@@ -48,6 +48,7 @@ import (
 	"go.temporal.io/server/common/log/tag"
 	"go.temporal.io/server/common/metrics"
 	"go.temporal.io/server/common/payload"
+	serviceerrors "go.temporal.io/server/common/serviceerror"
 )
 
 const (
@@ -226,7 +227,7 @@ func IsWhitelistServiceTransientError(err error) bool {
 	switch err.(type) {
 	case *serviceerror.Internal,
 		*serviceerror.ResourceExhausted,
-		*serviceerror.ShardOwnershipLost,
+		*serviceerrors.ShardOwnershipLost,
 		*serviceerror.DeadlineExceeded,
 		*serviceerror.Unavailable:
 		return true
@@ -400,6 +401,7 @@ func CreateHistoryStartWorkflowRequest(
 		NamespaceId:            namespaceID,
 		StartRequest:           startRequest,
 		ContinueAsNewInitiator: enumspb.CONTINUE_AS_NEW_INITIATOR_WORKFLOW,
+		Attempt:                1,
 	}
 	if startRequest.GetWorkflowExecutionTimeoutSeconds() > 0 {
 		expirationInSeconds := startRequest.GetWorkflowExecutionTimeoutSeconds()
