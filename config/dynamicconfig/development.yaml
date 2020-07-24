@@ -22,8 +22,14 @@ history.historyMgrNumConns:
 system.advancedVisibilityWritingMode:
 - value: "off"
   constraints: {}
+matching.getTaskBatchSize:
+- value: 30
+  constraints: {}
 matching.numTaskqueueReadPartitions:
-- value: 1
+- value: 10
+  constraints: {}
+matching.numTaskqueueWritePartitions:
+- value: 10
   constraints: {}
 history.defaultActivityRetryPolicy:
 - value:
