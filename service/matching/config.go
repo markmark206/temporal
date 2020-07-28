@@ -43,11 +43,11 @@ type (
 		ShutdownDrainDuration   dynamicconfig.DurationPropertyFn
 
 		// taskQueueManager configuration
-		RangeSize                    int64
-		GetTasksBatchSize            dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
-		UpdateAckInterval            dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
-		IdleTaskqueueCheckInterval   dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
-		MaxTaskqueueIdleTime         dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
+		RangeSize                  int64
+		GetTasksBatchSize          dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
+		UpdateAckInterval          dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
+		IdleTaskqueueCheckInterval dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
+		MaxTaskqueueIdleTime       dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
 		// markmark: number of partitions
 		NumTaskqueueWritePartitions  dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
 		NumTaskqueueReadPartitions   dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
@@ -113,8 +113,8 @@ func NewConfig(dc *dynamicconfig.Collection) *Config {
 		OutstandingTaskAppendsThreshold: dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingOutstandingTaskAppendsThreshold, 250),
 		MaxTaskBatchSize:                dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingMaxTaskBatchSize, 100),
 		ThrottledLogRPS:                 dc.GetIntProperty(dynamicconfig.MatchingThrottledLogRPS, 20),
-		NumTaskqueueWritePartitions:     dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingNumTaskqueueWritePartitions, 1),
-		NumTaskqueueReadPartitions:      dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingNumTaskqueueReadPartitions, 1),
+		NumTaskqueueWritePartitions:     dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingNumTaskqueueWritePartitions, 4),
+		NumTaskqueueReadPartitions:      dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingNumTaskqueueReadPartitions, 4),
 		ForwarderMaxOutstandingPolls:    dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingForwarderMaxOutstandingPolls, 1),
 		ForwarderMaxOutstandingTasks:    dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingForwarderMaxOutstandingTasks, 1),
 		ForwarderMaxRatePerSecond:       dc.GetIntPropertyFilteredByTaskQueueInfo(dynamicconfig.MatchingForwarderMaxRatePerSecond, 10),
@@ -165,14 +165,10 @@ func newTaskQueueConfig(id *taskQueueID, config *Config, namespaceCache cache.Na
 			return config.MaxTaskBatchSize(namespace, taskQueueName, taskType)
 		},
 		NumWritePartitions: func() int {
-			result := common.MaxInt(1, config.NumTaskqueueWritePartitions(namespace, taskQueueName, taskType))
-			log.Printf("NumWritePartitions markmark: %d", result)
-			return result
+			return common.MaxInt(1, config.NumTaskqueueWritePartitions(namespace, taskQueueName, taskType))
 		},
 		NumReadPartitions: func() int {
-			result := common.MaxInt(1, config.NumTaskqueueReadPartitions(namespace, taskQueueName, taskType))
-			log.Printf("NumReadPartitions markmark: %d", result)
-			return result
+			return common.MaxInt(1, config.NumTaskqueueReadPartitions(namespace, taskQueueName, taskType))
 		},
 		forwarderConfig: forwarderConfig{
 			ForwarderMaxOutstandingPolls: func() int {
