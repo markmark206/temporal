@@ -42,12 +42,11 @@ type (
 		ShutdownDrainDuration   dynamicconfig.DurationPropertyFn
 
 		// taskQueueManager configuration
-		RangeSize                  int64
-		GetTasksBatchSize          dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
-		UpdateAckInterval          dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
-		IdleTaskqueueCheckInterval dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
-		MaxTaskqueueIdleTime       dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
-		// markmark: number of partitions
+		RangeSize                    int64
+		GetTasksBatchSize            dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
+		UpdateAckInterval            dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
+		IdleTaskqueueCheckInterval   dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
+		MaxTaskqueueIdleTime         dynamicconfig.DurationPropertyFnWithTaskQueueInfoFilters
 		NumTaskqueueWritePartitions  dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
 		NumTaskqueueReadPartitions   dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
 		ForwarderMaxOutstandingPolls dynamicconfig.IntPropertyFnWithTaskQueueInfoFilters
