@@ -36,13 +36,3 @@ frontend.validSearchAttributes:
 
 system.minRetentionDays:
     - value: 0
-
-matching.getTaskBatchSize:
-    - value: 30
-      constraints: {}
-matching.numTaskqueueReadPartitions:
-    - value: 10
-      constraints: {}
-matching.numTaskqueueWritePartitions:
-    - value: 10
-      constraints: {}
