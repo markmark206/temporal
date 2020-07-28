@@ -25,7 +25,6 @@
 package matching
 
 import (
-	"log"
 	"time"
 
 	"go.temporal.io/server/common"
