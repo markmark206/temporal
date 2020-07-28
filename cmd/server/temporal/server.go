@@ -113,7 +113,6 @@ func (s *server) startService() common.Daemon {
 	params.Logger = loggerimpl.NewLogger(s.cfg.Log.NewZapLogger())
 	params.PersistenceConfig = s.cfg.Persistence
 
-	log.Printf("startService: markmark loading dynamic config for %#v", tag.Service(params.Name))
 	params.DynamicConfig, err = dynamicconfig.NewFileBasedClient(&s.cfg.DynamicConfigClient, params.Logger.WithTags(tag.Service(params.Name)), s.doneC)
 	if err != nil {
 		log.Printf("error creating file based dynamic config client, use no-op config client instead. error: %v", err)
