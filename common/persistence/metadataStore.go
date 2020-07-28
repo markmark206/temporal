@@ -33,6 +33,7 @@ import (
 	"go.temporal.io/server/common"
 	"go.temporal.io/server/common/log"
 	"go.temporal.io/server/common/persistence/serialization"
+	"go.temporal.io/server/common/primitives/timestamp"
 )
 
 type (
@@ -159,10 +160,9 @@ func (m *metadataManagerImpl) InitializeSystemNamespaces(currentClusterName stri
 				Owner:       "temporal-core@temporal.io",
 			},
 			Config: &persistenceblobs.NamespaceConfig{
-				RetentionDays:           common.SystemNamespaceRetentionDays,
+				Retention:               timestamp.DurationPtr(common.SystemNamespaceRetentionDays),
 				HistoryArchivalState:    enumspb.ARCHIVAL_STATE_DISABLED,
 				VisibilityArchivalState: enumspb.ARCHIVAL_STATE_DISABLED,
-				EmitMetric:              true,
 			},
 			ReplicationConfig: &persistenceblobs.NamespaceReplicationConfig{
 				ActiveClusterName: currentClusterName,

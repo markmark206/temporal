@@ -329,8 +329,8 @@ func (s *transferQueueActiveTaskExecutorSuite) TestProcessActivityTask_Duplicati
 	}
 
 	event = addActivityTaskStartedEvent(mutableState, event.GetEventId(), "")
-	ai.StartedID = event.GetEventId()
-	event = addActivityTaskCompletedEvent(mutableState, ai.ScheduleID, ai.StartedID, nil, "")
+	ai.StartedId = event.GetEventId()
+	event = addActivityTaskCompletedEvent(mutableState, ai.ScheduleId, ai.StartedId, nil, "")
 
 	persistenceMutableState := s.createPersistenceMutableState(mutableState, event.GetEventId(), event.GetVersion())
 	s.mockExecutionMgr.On("GetWorkflowExecution", mock.Anything).Return(&persistence.GetWorkflowExecutionResponse{State: persistenceMutableState}, nil)
@@ -481,7 +481,7 @@ func (s *transferQueueActiveTaskExecutorSuite) TestProcessWorkflowTask_Sticky_No
 	// set the sticky taskqueue attr
 	executionInfo := mutableState.GetExecutionInfo()
 	executionInfo.StickyTaskQueue = stickyTaskQueueName
-	executionInfo.StickyScheduleToStartTimeout = stickyTaskQueueTimeout
+	executionInfo.StickyScheduleToStartTimeout = int64(stickyTaskQueueTimeout)
 
 	// make another round of workflow task
 	taskID := int64(59)
@@ -544,7 +544,7 @@ func (s *transferQueueActiveTaskExecutorSuite) TestProcessWorkflowTask_WorkflowT
 	// set the sticky taskqueue attr
 	executionInfo := mutableState.GetExecutionInfo()
 	executionInfo.StickyTaskQueue = stickyTaskQueueName
-	executionInfo.StickyScheduleToStartTimeout = stickyTaskQueueTimeout
+	executionInfo.StickyScheduleToStartTimeout = int64(stickyTaskQueueTimeout)
 
 	// make another round of workflow task
 	taskID := int64(59)
@@ -1683,7 +1683,7 @@ func (s *transferQueueActiveTaskExecutorSuite) TestProcessStartChildExecution_Su
 	}
 
 	event = addChildWorkflowExecutionStartedEvent(mutableState, event.GetEventId(), testChildNamespaceID, childWorkflowID, childRunID, childWorkflowType)
-	ci.StartedID = event.GetEventId()
+	ci.StartedId = event.GetEventId()
 
 	persistenceMutableState := s.createPersistenceMutableState(mutableState, event.GetEventId(), event.GetVersion())
 	s.mockExecutionMgr.On("GetWorkflowExecution", mock.Anything).Return(&persistence.GetWorkflowExecutionResponse{State: persistenceMutableState}, nil)
@@ -1768,8 +1768,8 @@ func (s *transferQueueActiveTaskExecutorSuite) TestProcessStartChildExecution_Du
 	}
 
 	event = addChildWorkflowExecutionStartedEvent(mutableState, event.GetEventId(), testChildNamespaceID, childExecution.GetWorkflowId(), childExecution.GetRunId(), childWorkflowType)
-	ci.StartedID = event.GetEventId()
-	event = addChildWorkflowExecutionCompletedEvent(mutableState, ci.InitiatedID, &childExecution, &historypb.WorkflowExecutionCompletedEventAttributes{
+	ci.StartedId = event.GetEventId()
+	event = addChildWorkflowExecutionCompletedEvent(mutableState, ci.InitiatedId, &childExecution, &historypb.WorkflowExecutionCompletedEventAttributes{
 		Result:                       payloads.EncodeString("some random child workflow execution result"),
 		WorkflowTaskCompletedEventId: transferTask.GetScheduleId(),
 	})
@@ -1898,7 +1898,7 @@ func (s *transferQueueActiveTaskExecutorSuite) TestCopySearchAttributes() {
 
 func (s *transferQueueActiveTaskExecutorSuite) createAddActivityTaskRequest(
 	task *persistenceblobs.TransferTaskInfo,
-	ai *persistence.ActivityInfo,
+	ai *persistenceblobs.ActivityInfo,
 ) *matchingservice.AddActivityTaskRequest {
 	return &matchingservice.AddActivityTaskRequest{
 		NamespaceId:       task.GetTargetNamespaceId(),
@@ -1912,7 +1912,7 @@ func (s *transferQueueActiveTaskExecutorSuite) createAddActivityTaskRequest(
 			Kind: enumspb.TASK_QUEUE_KIND_NORMAL,
 		},
 		ScheduleId:                    task.GetScheduleId(),
-		ScheduleToStartTimeoutSeconds: ai.ScheduleToStartTimeout,
+		ScheduleToStartTimeoutSeconds: int32(ai.ScheduleToStartTimeout.Seconds()),
 	}
 }
 
@@ -1941,7 +1941,7 @@ func (s *transferQueueActiveTaskExecutorSuite) createAddWorkflowTaskRequest(
 		Execution:                     &execution,
 		TaskQueue:                     taskQueue,
 		ScheduleId:                    task.GetScheduleId(),
-		ScheduleToStartTimeoutSeconds: timeout,
+		ScheduleToStartTimeoutSeconds: int32(timeout),
 	}
 }
 
@@ -2038,7 +2038,7 @@ func (s *transferQueueActiveTaskExecutorSuite) createChildWorkflowExecutionReque
 	childNamespace string,
 	task *persistenceblobs.TransferTaskInfo,
 	mutableState mutableState,
-	ci *persistence.ChildExecutionInfo,
+	ci *persistenceblobs.ChildExecutionInfo,
 ) *historyservice.StartWorkflowExecutionRequest {
 
 	event, err := mutableState.GetChildExecutionInitiatedEvent(task.GetScheduleId())
@@ -2062,7 +2062,7 @@ func (s *transferQueueActiveTaskExecutorSuite) createChildWorkflowExecutionReque
 			WorkflowRunTimeoutSeconds:       attributes.WorkflowRunTimeoutSeconds,
 			WorkflowTaskTimeoutSeconds:      attributes.WorkflowTaskTimeoutSeconds,
 			// Use the same request ID to dedupe StartWorkflowExecution calls
-			RequestId:             ci.CreateRequestID,
+			RequestId:             ci.CreateRequestId,
 			WorkflowIdReusePolicy: attributes.WorkflowIdReusePolicy,
 		},
 		ParentExecutionInfo: &workflowspb.ParentExecutionInfo{

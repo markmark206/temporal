@@ -50,9 +50,11 @@ import (
 
 type (
 	commandAttrValidator struct {
-		namespaceCache            cache.NamespaceCache
-		maxIDLengthLimit          int
-		searchAttributesValidator *validator.SearchAttributesValidator
+		namespaceCache             cache.NamespaceCache
+		config                     *Config
+		maxIDLengthLimit           int
+		searchAttributesValidator  *validator.SearchAttributesValidator
+		defaultActivityRetryPolicy *commonpb.RetryPolicy
 	}
 
 	workflowSizeChecker struct {
@@ -84,6 +86,7 @@ func newCommandAttrValidator(
 ) *commandAttrValidator {
 	return &commandAttrValidator{
 		namespaceCache:   namespaceCache,
+		config:           config,
 		maxIDLengthLimit: config.MaxIDLengthLimit(),
 		searchAttributesValidator: validator.NewSearchAttributesValidator(
 			logger,
@@ -92,6 +95,7 @@ func newCommandAttrValidator(
 			config.SearchAttributesSizeOfValueLimit,
 			config.SearchAttributesTotalSizeLimit,
 		),
+		defaultActivityRetryPolicy: fromConfigToActivityRetryPolicy(config.DefaultActivityRetryPolicy()),
 	}
 }
 
@@ -212,7 +216,7 @@ func (v *commandAttrValidator) validateActivityScheduleAttributes(
 	}
 
 	defaultTaskQueueName := ""
-	if _, err := v.validatedTaskQueue(attributes.TaskQueue, defaultTaskQueueName); err != nil {
+	if _, err := v.validateTaskQueue(attributes.TaskQueue, defaultTaskQueueName); err != nil {
 		return err
 	}
 
@@ -224,7 +228,7 @@ func (v *commandAttrValidator) validateActivityScheduleAttributes(
 		return serviceerror.NewInvalidArgument("ActivityType is not set on command.")
 	}
 
-	if err := common.ValidateRetryPolicy(attributes.RetryPolicy); err != nil {
+	if err := v.validateActivityRetryPolicy(attributes); err != nil {
 		return err
 	}
 
@@ -395,6 +399,7 @@ func (v *commandAttrValidator) validateCancelWorkflowExecutionAttributes(
 func (v *commandAttrValidator) validateCancelExternalWorkflowExecutionAttributes(
 	namespaceID string,
 	targetNamespaceID string,
+	initiatedChildExecutionsInSession map[string]struct{},
 	attributes *commandpb.RequestCancelExternalWorkflowExecutionCommandAttributes,
 ) error {
 
@@ -420,6 +425,9 @@ func (v *commandAttrValidator) validateCancelExternalWorkflowExecutionAttributes
 	runID := attributes.GetRunId()
 	if runID != "" && uuid.Parse(runID) == nil {
 		return serviceerror.NewInvalidArgument("Invalid RunId set on command.")
+	}
+	if _, ok := initiatedChildExecutionsInSession[attributes.GetWorkflowId()]; ok {
+		return serviceerror.NewInvalidArgument("Start and RequestCancel for child workflow is not allowed in same workflow task.")
 	}
 
 	return nil
@@ -504,7 +512,7 @@ func (v *commandAttrValidator) validateContinueAsNewWorkflowExecutionAttributes(
 	}
 
 	// Inherit Taskqueue from previous execution if not provided on command
-	taskQueue, err := v.validatedTaskQueue(attributes.TaskQueue, executionInfo.TaskQueue)
+	taskQueue, err := v.validateTaskQueue(attributes.TaskQueue, executionInfo.TaskQueue)
 	if err != nil {
 		return err
 	}
@@ -519,16 +527,16 @@ func (v *commandAttrValidator) validateContinueAsNewWorkflowExecutionAttributes(
 		if attributes.GetWorkflowRunTimeoutSeconds() > 0 {
 			runTimeout = common.MinInt32(runTimeout, attributes.GetWorkflowRunTimeoutSeconds())
 		} else {
-			runTimeout = common.MinInt32(runTimeout, executionInfo.WorkflowRunTimeout)
+			runTimeout = common.MinInt32(runTimeout, int32(executionInfo.WorkflowRunTimeout))
 		}
 		attributes.WorkflowRunTimeoutSeconds = runTimeout
 	} else if attributes.GetWorkflowRunTimeoutSeconds() == 0 {
-		attributes.WorkflowRunTimeoutSeconds = executionInfo.WorkflowRunTimeout
+		attributes.WorkflowRunTimeoutSeconds = int32(executionInfo.WorkflowRunTimeout)
 	}
 
 	// Inherit workflow task timeout from previous execution if not provided on command
 	if attributes.GetWorkflowTaskTimeoutSeconds() <= 0 {
-		attributes.WorkflowTaskTimeoutSeconds = executionInfo.DefaultWorkflowTaskTimeout
+		attributes.WorkflowTaskTimeoutSeconds = int32(executionInfo.DefaultWorkflowTaskTimeout)
 	}
 
 	// Check next run workflow task delay
@@ -546,6 +554,7 @@ func (v *commandAttrValidator) validateContinueAsNewWorkflowExecutionAttributes(
 func (v *commandAttrValidator) validateStartChildExecutionAttributes(
 	namespaceID string,
 	targetNamespaceID string,
+	targetNamespace string,
 	attributes *commandpb.StartChildWorkflowExecutionCommandAttributes,
 	parentInfo *persistence.WorkflowExecutionInfo,
 ) error {
@@ -590,31 +599,27 @@ func (v *commandAttrValidator) validateStartChildExecutionAttributes(
 	}
 
 	// Inherit taskqueue from parent workflow execution if not provided on command
-	taskQueue, err := v.validatedTaskQueue(attributes.TaskQueue, parentInfo.TaskQueue)
+	taskQueue, err := v.validateTaskQueue(attributes.TaskQueue, parentInfo.TaskQueue)
 	if err != nil {
 		return err
 	}
 	attributes.TaskQueue = taskQueue
 
-	// Inherit workflow timeout from parent workflow execution if not provided on command
-	if attributes.GetWorkflowExecutionTimeoutSeconds() <= 0 {
-		attributes.WorkflowExecutionTimeoutSeconds = parentInfo.WorkflowExecutionTimeout
-	}
+	attributes.WorkflowExecutionTimeoutSeconds = getWorkflowExecutionTimeout(targetNamespace,
+		attributes.GetWorkflowExecutionTimeoutSeconds(), v.config)
 
-	// Inherit workflow timeout from parent workflow execution if not provided on command
-	if attributes.GetWorkflowRunTimeoutSeconds() <= 0 {
-		attributes.WorkflowRunTimeoutSeconds = parentInfo.WorkflowRunTimeout
-	}
+	attributes.WorkflowRunTimeoutSeconds = getWorkflowRunTimeout(targetNamespace,
+		attributes.GetWorkflowRunTimeoutSeconds(), attributes.GetWorkflowExecutionTimeoutSeconds(), v.config)
 
 	// Inherit workflow task timeout from parent workflow execution if not provided on command
 	if attributes.GetWorkflowTaskTimeoutSeconds() <= 0 {
-		attributes.WorkflowTaskTimeoutSeconds = parentInfo.DefaultWorkflowTaskTimeout
+		attributes.WorkflowTaskTimeoutSeconds = int32(parentInfo.DefaultWorkflowTaskTimeout)
 	}
 
 	return nil
 }
 
-func (v *commandAttrValidator) validatedTaskQueue(
+func (v *commandAttrValidator) validateTaskQueue(
 	taskQueue *taskqueuepb.TaskQueue,
 	defaultVal string,
 ) (*taskqueuepb.TaskQueue, error) {
@@ -643,6 +648,15 @@ func (v *commandAttrValidator) validatedTaskQueue(
 	}
 
 	return taskQueue, nil
+}
+
+func (v *commandAttrValidator) validateActivityRetryPolicy(attributes *commandpb.ScheduleActivityTaskCommandAttributes) error {
+	if attributes.RetryPolicy == nil {
+		attributes.RetryPolicy = v.defaultActivityRetryPolicy
+		return nil
+	}
+
+	return common.ValidateRetryPolicy(attributes.RetryPolicy)
 }
 
 func (v *commandAttrValidator) validateCrossNamespaceCall(

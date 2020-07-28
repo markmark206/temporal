@@ -1091,7 +1091,7 @@ func (e *historyEngineImpl) getMutableState(
 		ClientLibraryVersion:                  executionInfo.ClientLibraryVersion,
 		ClientFeatureVersion:                  executionInfo.ClientFeatureVersion,
 		ClientImpl:                            executionInfo.ClientImpl,
-		StickyTaskQueueScheduleToStartTimeout: executionInfo.StickyScheduleToStartTimeout,
+		StickyTaskQueueScheduleToStartTimeout: int32(executionInfo.StickyScheduleToStartTimeout),
 		CurrentBranchToken:                    currentBranchToken,
 		WorkflowState:                         workflowState,
 		WorkflowStatus:                        workflowStatus,
@@ -1232,9 +1232,9 @@ func (e *historyEngineImpl) DescribeWorkflowExecution(
 				Name: executionInfo.TaskQueue,
 				Kind: enumspb.TASK_QUEUE_KIND_NORMAL,
 			},
-			WorkflowExecutionTimeoutSeconds: executionInfo.WorkflowExecutionTimeout,
-			WorkflowRunTimeoutSeconds:       executionInfo.WorkflowRunTimeout,
-			WorkflowTaskTimeoutSeconds:      executionInfo.DefaultWorkflowTaskTimeout,
+			WorkflowExecutionTimeoutSeconds:   int32(executionInfo.WorkflowExecutionTimeout),
+			WorkflowRunTimeoutSeconds:         int32(executionInfo.WorkflowRunTimeout),
+			DefaultWorkflowTaskTimeoutSeconds: int32(executionInfo.DefaultWorkflowTaskTimeout),
 		},
 		WorkflowExecutionInfo: &workflowpb.WorkflowExecutionInfo{
 			Execution: &commonpb.WorkflowExecution{
@@ -1281,22 +1281,22 @@ func (e *historyEngineImpl) DescribeWorkflowExecution(
 	if len(mutableState.GetPendingActivityInfos()) > 0 {
 		for _, ai := range mutableState.GetPendingActivityInfos() {
 			p := &workflowpb.PendingActivityInfo{
-				ActivityId: ai.ActivityID,
+				ActivityId: ai.ActivityId,
 			}
 			if ai.CancelRequested {
 				p.State = enumspb.PENDING_ACTIVITY_STATE_CANCEL_REQUESTED
-			} else if ai.StartedID != common.EmptyEventID {
+			} else if ai.StartedId != common.EmptyEventID {
 				p.State = enumspb.PENDING_ACTIVITY_STATE_STARTED
 			} else {
 				p.State = enumspb.PENDING_ACTIVITY_STATE_SCHEDULED
 			}
-			lastHeartbeatUnixNano := ai.LastHeartBeatUpdatedTime.UnixNano()
+			lastHeartbeatUnixNano := ai.LastHeartbeatUpdateTime.UnixNano()
 			if lastHeartbeatUnixNano > 0 {
 				p.LastHeartbeatTimestamp = lastHeartbeatUnixNano
-				p.HeartbeatDetails = ai.Details
+				p.HeartbeatDetails = ai.LastHeartbeatDetails
 			}
 			// TODO: move to mutable state instead of loading it from event
-			scheduledEvent, err := mutableState.GetActivityScheduledEvent(ai.ScheduleID)
+			scheduledEvent, err := mutableState.GetActivityScheduledEvent(ai.ScheduleId)
 			if err != nil {
 				return nil, err
 			}
@@ -1308,15 +1308,15 @@ func (e *historyEngineImpl) DescribeWorkflowExecution(
 			}
 			if ai.HasRetryPolicy {
 				p.Attempt = ai.Attempt
-				p.ExpirationTimestamp = ai.ExpirationTime.UnixNano()
-				if ai.MaximumAttempts != 0 {
-					p.MaximumAttempts = ai.MaximumAttempts
+				p.ExpirationTimestamp = ai.RetryExpirationTime.UnixNano()
+				if ai.RetryMaximumAttempts != 0 {
+					p.MaximumAttempts = ai.RetryMaximumAttempts
 				}
-				if ai.LastFailure != nil {
-					p.LastFailure = ai.LastFailure
+				if ai.RetryLastFailure != nil {
+					p.LastFailure = ai.RetryLastFailure
 				}
-				if ai.LastWorkerIdentity != "" {
-					p.LastWorkerIdentity = ai.LastWorkerIdentity
+				if ai.RetryLastWorkerIdentity != "" {
+					p.LastWorkerIdentity = ai.RetryLastWorkerIdentity
 				}
 			} else {
 				p.Attempt = 1
@@ -1328,11 +1328,11 @@ func (e *historyEngineImpl) DescribeWorkflowExecution(
 	if len(mutableState.GetPendingChildExecutionInfos()) > 0 {
 		for _, ch := range mutableState.GetPendingChildExecutionInfos() {
 			p := &workflowpb.PendingChildExecutionInfo{
-				WorkflowId:        ch.StartedWorkflowID,
-				RunId:             ch.StartedRunID,
+				WorkflowId:        ch.StartedWorkflowId,
+				RunId:             ch.StartedRunId,
 				WorkflowTypeName:  ch.WorkflowTypeName,
-				InitiatedId:       ch.InitiatedID,
-				ParentClosePolicy: enumspb.ParentClosePolicy(ch.ParentClosePolicy),
+				InitiatedId:       ch.InitiatedId,
+				ParentClosePolicy: ch.ParentClosePolicy,
 			}
 			result.PendingChildren = append(result.PendingChildren, p)
 		}
@@ -1395,9 +1395,9 @@ func (e *historyEngineImpl) RecordActivityTaskStarted(
 			response.ScheduledEvent = scheduledEvent
 			response.ScheduledTimestampOfThisAttempt = ai.ScheduledTime.UnixNano()
 
-			if ai.StartedID != common.EmptyEventID {
+			if ai.StartedId != common.EmptyEventID {
 				// If activity is started as part of the current request scope then return a positive response
-				if ai.RequestID == requestID {
+				if ai.RequestId == requestID {
 					response.StartedTimestamp = ai.StartedTime.UnixNano()
 					response.Attempt = int64(ai.Attempt)
 					return nil
@@ -1417,7 +1417,7 @@ func (e *historyEngineImpl) RecordActivityTaskStarted(
 
 			response.StartedTimestamp = ai.StartedTime.UnixNano()
 			response.Attempt = int64(ai.Attempt)
-			response.HeartbeatDetails = ai.Details
+			response.HeartbeatDetails = ai.LastHeartbeatDetails
 
 			response.WorkflowType = mutableState.GetWorkflowType()
 			response.WorkflowNamespace = namespace
@@ -1512,16 +1512,16 @@ func (e *historyEngineImpl) RespondActivityTaskCompleted(
 				return ErrStaleState
 			}
 
-			if !isRunning || ai.StartedID == common.EmptyEventID ||
+			if !isRunning || ai.StartedId == common.EmptyEventID ||
 				(token.GetScheduleId() != common.EmptyEventID && token.ScheduleAttempt != int64(ai.Attempt)) {
 				return ErrActivityTaskNotFound
 			}
 
-			if _, err := mutableState.AddActivityTaskCompletedEvent(scheduleID, ai.StartedID, request); err != nil {
+			if _, err := mutableState.AddActivityTaskCompletedEvent(scheduleID, ai.StartedId, request); err != nil {
 				// Unable to add ActivityTaskCompleted event to history
 				return serviceerror.NewInternal("Unable to add ActivityTaskCompleted event to history.")
 			}
-			activityStartedTime = ai.StartedTime
+			activityStartedTime = *ai.StartedTime
 			taskQueue = ai.TaskQueue
 			return nil
 		})
@@ -1586,7 +1586,7 @@ func (e *historyEngineImpl) RespondActivityTaskFailed(
 				return nil, ErrStaleState
 			}
 
-			if !isRunning || ai.StartedID == common.EmptyEventID ||
+			if !isRunning || ai.StartedId == common.EmptyEventID ||
 				(token.GetScheduleId() != common.EmptyEventID && token.ScheduleAttempt != int64(ai.Attempt)) {
 				return nil, ErrActivityTaskNotFound
 			}
@@ -1599,14 +1599,14 @@ func (e *historyEngineImpl) RespondActivityTaskFailed(
 			}
 			if retryState != enumspb.RETRY_STATE_IN_PROGRESS {
 				// no more retry, and we want to record the failure event
-				if _, err := mutableState.AddActivityTaskFailedEvent(scheduleID, ai.StartedID, failure, retryState, request.GetIdentity()); err != nil {
+				if _, err := mutableState.AddActivityTaskFailedEvent(scheduleID, ai.StartedId, failure, retryState, request.GetIdentity()); err != nil {
 					// Unable to add ActivityTaskFailed event to history
 					return nil, serviceerror.NewInternal("Unable to add ActivityTaskFailed event to history.")
 				}
 				postActions.createWorkflowTask = true
 			}
 
-			activityStartedTime = ai.StartedTime
+			activityStartedTime = *ai.StartedTime
 			taskQueue = ai.TaskQueue
 			return postActions, nil
 		})
@@ -1671,22 +1671,22 @@ func (e *historyEngineImpl) RespondActivityTaskCanceled(
 				return ErrStaleState
 			}
 
-			if !isRunning || ai.StartedID == common.EmptyEventID ||
+			if !isRunning || ai.StartedId == common.EmptyEventID ||
 				(token.GetScheduleId() != common.EmptyEventID && token.ScheduleAttempt != int64(ai.Attempt)) {
 				return ErrActivityTaskNotFound
 			}
 
 			if _, err := mutableState.AddActivityTaskCanceledEvent(
 				scheduleID,
-				ai.StartedID,
-				ai.CancelRequestID,
+				ai.StartedId,
+				ai.CancelRequestId,
 				request.Details,
 				request.Identity); err != nil {
 				// Unable to add ActivityTaskCanceled event to history
 				return serviceerror.NewInternal("Unable to add ActivityTaskCanceled event to history.")
 			}
 
-			activityStartedTime = ai.StartedTime
+			activityStartedTime = *ai.StartedTime
 			taskQueue = ai.TaskQueue
 			return nil
 		})
@@ -1753,7 +1753,7 @@ func (e *historyEngineImpl) RecordActivityTaskHeartbeat(
 				return ErrStaleState
 			}
 
-			if !isRunning || ai.StartedID == common.EmptyEventID ||
+			if !isRunning || ai.StartedId == common.EmptyEventID ||
 				(token.GetScheduleId() != common.EmptyEventID && token.ScheduleAttempt != int64(ai.Attempt)) {
 				return ErrActivityTaskNotFound
 			}
@@ -2212,7 +2212,7 @@ func (e *historyEngineImpl) RecordChildExecutionCompleted(
 
 			// Check mutable state to make sure child execution is in pending child executions
 			ci, isRunning := mutableState.GetChildExecutionInfo(initiatedID)
-			if !isRunning || ci.StartedID == common.EmptyEventID {
+			if !isRunning || ci.StartedId == common.EmptyEventID {
 				return serviceerror.NewNotFound("Pending child execution not found.")
 			}
 
@@ -2657,13 +2657,7 @@ func (e *historyEngineImpl) overrideStartWorkflowExecutionRequest(
 	metricsScope int,
 ) {
 	namespace := namespaceEntry.GetInfo().Name
-
-	executionTimeoutSeconds := request.GetWorkflowExecutionTimeoutSeconds()
-	if executionTimeoutSeconds == 0 {
-		executionTimeoutSeconds = convert.Int32Ceil(e.config.DefaultWorkflowExecutionTimeout(namespace).Seconds())
-	}
-	maxWorkflowExecutionTimeout := convert.Int32Ceil(e.config.MaxWorkflowExecutionTimeout(namespace).Seconds())
-	executionTimeoutSeconds = common.MinInt32(executionTimeoutSeconds, maxWorkflowExecutionTimeout)
+	executionTimeoutSeconds := getWorkflowExecutionTimeout(namespace, request.GetWorkflowExecutionTimeoutSeconds(), e.config)
 	if executionTimeoutSeconds != request.GetWorkflowExecutionTimeoutSeconds() {
 		request.WorkflowExecutionTimeoutSeconds = executionTimeoutSeconds
 		e.metricsClient.Scope(
@@ -2672,13 +2666,8 @@ func (e *historyEngineImpl) overrideStartWorkflowExecutionRequest(
 		).IncCounter(metrics.WorkflowExecutionTimeoutOverrideCount)
 	}
 
-	runTimeoutSeconds := request.GetWorkflowRunTimeoutSeconds()
-	if runTimeoutSeconds == 0 {
-		runTimeoutSeconds = convert.Int32Ceil(e.config.DefaultWorkflowRunTimeout(namespace).Seconds())
-	}
-	maxWorkflowRunTimeout := convert.Int32Ceil(e.config.MaxWorkflowRunTimeout(namespace).Seconds())
-	runTimeoutSeconds = common.MinInt32(runTimeoutSeconds, maxWorkflowRunTimeout)
-	runTimeoutSeconds = common.MinInt32(runTimeoutSeconds, executionTimeoutSeconds)
+	runTimeoutSeconds := getWorkflowRunTimeout(namespace, request.GetWorkflowRunTimeoutSeconds(),
+		executionTimeoutSeconds, e.config)
 	if runTimeoutSeconds != request.GetWorkflowRunTimeoutSeconds() {
 		request.WorkflowRunTimeoutSeconds = runTimeoutSeconds
 		e.metricsClient.Scope(
@@ -2755,7 +2744,7 @@ func getScheduleID(
 	if !ok {
 		return 0, serviceerror.NewInvalidArgument("Cannot locate Activity ScheduleID")
 	}
-	return activityInfo.ScheduleID, nil
+	return activityInfo.ScheduleId, nil
 }
 
 func getStartRequest(

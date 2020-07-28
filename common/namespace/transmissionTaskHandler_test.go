@@ -27,7 +27,6 @@ package namespace
 import (
 	"testing"
 
-	"github.com/gogo/protobuf/types"
 	"github.com/stretchr/testify/suite"
 	enumspb "go.temporal.io/api/enums/v1"
 	namespacepb "go.temporal.io/api/namespace/v1"
@@ -39,6 +38,7 @@ import (
 	"go.temporal.io/server/common/log/loggerimpl"
 	"go.temporal.io/server/common/mocks"
 	"go.temporal.io/server/common/primitives"
+	"go.temporal.io/server/common/primitives/timestamp"
 )
 
 type (
@@ -82,7 +82,6 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_RegisterNamespaceTask
 	ownerEmail := "some random test owner"
 	data := map[string]string{"k": "v"}
 	retention := int32(10)
-	emitMetric := true
 	historyArchivalState := enumspb.ARCHIVAL_STATE_ENABLED
 	historyArchivalURI := "some random history archival uri"
 	visibilityArchivalState := enumspb.ARCHIVAL_STATE_ENABLED
@@ -103,8 +102,7 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_RegisterNamespaceTask
 		Data:        data,
 	}
 	config := &persistenceblobs.NamespaceConfig{
-		RetentionDays:           retention,
-		EmitMetric:              emitMetric,
+		Retention:               timestamp.DurationFromDays(retention),
 		HistoryArchivalState:    historyArchivalState,
 		HistoryArchivalUri:      historyArchivalURI,
 		VisibilityArchivalState: visibilityArchivalState,
@@ -132,7 +130,6 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_RegisterNamespaceTask
 				},
 				Config: &namespacepb.NamespaceConfig{
 					WorkflowExecutionRetentionPeriodInDays: retention,
-					EmitMetric:                             &types.BoolValue{Value: emitMetric},
 					HistoryArchivalState:                   historyArchivalState,
 					HistoryArchivalUri:                     historyArchivalURI,
 					VisibilityArchivalState:                visibilityArchivalState,
@@ -160,7 +157,6 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_RegisterNamespaceTask
 	ownerEmail := "some random test owner"
 	data := map[string]string{"k": "v"}
 	retention := int32(10)
-	emitMetric := true
 	historyArchivalState := enumspb.ARCHIVAL_STATE_ENABLED
 	historyArchivalURI := "some random history archival uri"
 	visibilityArchivalState := enumspb.ARCHIVAL_STATE_ENABLED
@@ -181,8 +177,7 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_RegisterNamespaceTask
 		Data:        data,
 	}
 	config := &persistenceblobs.NamespaceConfig{
-		RetentionDays:           retention,
-		EmitMetric:              emitMetric,
+		Retention:               timestamp.DurationFromDays(retention),
 		HistoryArchivalState:    historyArchivalState,
 		HistoryArchivalUri:      historyArchivalURI,
 		VisibilityArchivalState: visibilityArchivalState,
@@ -208,7 +203,6 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_UpdateNamespaceTask_I
 	ownerEmail := "some random test owner"
 	data := map[string]string{"k": "v"}
 	retention := int32(10)
-	emitMetric := true
 	historyArchivalState := enumspb.ARCHIVAL_STATE_ENABLED
 	historyArchivalURI := "some random history archival uri"
 	visibilityArchivalState := enumspb.ARCHIVAL_STATE_ENABLED
@@ -229,8 +223,7 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_UpdateNamespaceTask_I
 		Data:        data,
 	}
 	config := &persistenceblobs.NamespaceConfig{
-		RetentionDays:           retention,
-		EmitMetric:              emitMetric,
+		Retention:               timestamp.DurationFromDays(retention),
 		HistoryArchivalState:    historyArchivalState,
 		HistoryArchivalUri:      historyArchivalURI,
 		VisibilityArchivalState: visibilityArchivalState,
@@ -258,7 +251,6 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_UpdateNamespaceTask_I
 				},
 				Config: &namespacepb.NamespaceConfig{
 					WorkflowExecutionRetentionPeriodInDays: retention,
-					EmitMetric:                             &types.BoolValue{Value: emitMetric},
 					HistoryArchivalState:                   historyArchivalState,
 					HistoryArchivalUri:                     historyArchivalURI,
 					VisibilityArchivalState:                visibilityArchivalState,
@@ -285,7 +277,6 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_UpdateNamespaceTask_N
 	ownerEmail := "some random test owner"
 	data := map[string]string{"k": "v"}
 	retention := int32(10)
-	emitMetric := true
 	historyArchivalState := enumspb.ARCHIVAL_STATE_ENABLED
 	historyArchivalURI := "some random history archival uri"
 	visibilityArchivalState := enumspb.ARCHIVAL_STATE_ENABLED
@@ -306,8 +297,7 @@ func (s *transmissionTaskSuite) TestHandleTransmissionTask_UpdateNamespaceTask_N
 		Data:        data,
 	}
 	config := &persistenceblobs.NamespaceConfig{
-		RetentionDays:           retention,
-		EmitMetric:              emitMetric,
+		Retention:               timestamp.DurationFromDays(retention),
 		HistoryArchivalState:    historyArchivalState,
 		HistoryArchivalUri:      historyArchivalURI,
 		VisibilityArchivalState: visibilityArchivalState,

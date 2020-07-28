@@ -25,7 +25,6 @@
 package namespace
 
 import (
-	"github.com/gogo/protobuf/types"
 	namespacepb "go.temporal.io/api/namespace/v1"
 	replicationpb "go.temporal.io/api/replication/v1"
 
@@ -35,6 +34,7 @@ import (
 	"go.temporal.io/server/common/log"
 	"go.temporal.io/server/common/log/tag"
 	"go.temporal.io/server/common/messaging"
+	"go.temporal.io/server/common/primitives/timestamp"
 )
 
 // NOTE: the counterpart of namespace replication receiving logic is in service/worker package
@@ -84,8 +84,7 @@ func (namespaceReplicator *namespaceReplicatorImpl) HandleTransmissionTask(names
 				Data:        info.Data,
 			},
 			Config: &namespacepb.NamespaceConfig{
-				WorkflowExecutionRetentionPeriodInDays: config.RetentionDays,
-				EmitMetric:                             &types.BoolValue{Value: config.EmitMetric},
+				WorkflowExecutionRetentionPeriodInDays: timestamp.DaysInt32FromDuration(config.Retention),
 				HistoryArchivalState:                   config.HistoryArchivalState,
 				HistoryArchivalUri:                     config.HistoryArchivalUri,
 				VisibilityArchivalState:                config.VisibilityArchivalState,

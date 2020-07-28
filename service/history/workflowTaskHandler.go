@@ -54,12 +54,13 @@ type (
 		namespaceEntry          *cache.NamespaceCacheEntry
 
 		// internal state
-		hasBufferedEvents           bool
-		failWorkflowTaskInfo        *failWorkflowTaskInfo
-		activityNotStartedCancelled bool
-		continueAsNewBuilder        mutableState
-		stopProcessing              bool // should stop processing any more commands
-		mutableState                mutableState
+		hasBufferedEvents               bool
+		failWorkflowTaskInfo            *failWorkflowTaskInfo
+		activityNotStartedCancelled     bool
+		continueAsNewBuilder            mutableState
+		stopProcessing                  bool // should stop processing any more commands
+		mutableState                    mutableState
+		initiatedChildExecutionsInBatch map[string]struct{} // Set of initiated child executions in the workflow task
 
 		// validation
 		attrValidator    *commandAttrValidator
@@ -96,12 +97,13 @@ func newWorkflowTaskHandler(
 		namespaceEntry:          namespaceEntry,
 
 		// internal state
-		hasBufferedEvents:           mutableState.HasBufferedEvents(),
-		failWorkflowTaskInfo:        nil,
-		activityNotStartedCancelled: false,
-		continueAsNewBuilder:        nil,
-		stopProcessing:              false,
-		mutableState:                mutableState,
+		hasBufferedEvents:               mutableState.HasBufferedEvents(),
+		failWorkflowTaskInfo:            nil,
+		activityNotStartedCancelled:     false,
+		continueAsNewBuilder:            nil,
+		stopProcessing:                  false,
+		mutableState:                    mutableState,
+		initiatedChildExecutionsInBatch: make(map[string]struct{}),
 
 		// validation
 		attrValidator:    attrValidator,
@@ -207,7 +209,7 @@ func (handler *workflowTaskHandlerImpl) handleCommandScheduleActivity(
 				namespaceID,
 				targetNamespaceID,
 				attr,
-				executionInfo.WorkflowRunTimeout,
+				int32(executionInfo.WorkflowRunTimeout),
 			)
 		},
 		enumspb.WORKFLOW_TASK_FAILED_CAUSE_BAD_SCHEDULE_ACTIVITY_ATTRIBUTES,
@@ -266,12 +268,12 @@ func (handler *workflowTaskHandlerImpl) handleCommandRequestCancelActivity(
 	)
 	switch err.(type) {
 	case nil:
-		if ai.StartedID == common.EmptyEventID {
+		if ai.StartedId == common.EmptyEventID {
 			// We haven't started the activity yet, we can cancel the activity right away and
 			// schedule a workflow task to ensure the workflow makes progress.
 			_, err = handler.mutableState.AddActivityTaskCanceledEvent(
-				ai.ScheduleID,
-				ai.StartedID,
+				ai.ScheduleId,
+				ai.StartedId,
 				actCancelReqEvent.GetEventId(),
 				payloads.EncodeString(activityCancellationMsgActivityNotStarted),
 				handler.identity,
@@ -582,6 +584,7 @@ func (handler *workflowTaskHandlerImpl) handleCommandRequestCancelExternalWorkfl
 			return handler.attrValidator.validateCancelExternalWorkflowExecutionAttributes(
 				namespaceID,
 				targetNamespaceID,
+				handler.initiatedChildExecutionsInBatch,
 				attr,
 			)
 		},
@@ -594,6 +597,7 @@ func (handler *workflowTaskHandlerImpl) handleCommandRequestCancelExternalWorkfl
 	_, _, err := handler.mutableState.AddRequestCancelExternalWorkflowExecutionInitiatedEvent(
 		handler.workflowTaskCompletedID, cancelRequestID, attr,
 	)
+
 	return err
 }
 
@@ -726,12 +730,15 @@ func (handler *workflowTaskHandlerImpl) handleCommandStartChildWorkflow(
 
 	executionInfo := handler.mutableState.GetExecutionInfo()
 	namespaceID := executionInfo.NamespaceID
+	parentNamespace := handler.namespaceEntry.GetInfo().GetName()
 	targetNamespaceID := namespaceID
+	targetNamespace := parentNamespace
 	if attr.GetNamespace() != "" {
 		targetNamespaceEntry, err := handler.namespaceCache.GetNamespace(attr.GetNamespace())
 		if err != nil {
 			return serviceerror.NewInternal(fmt.Sprintf("Unable to schedule child execution across namespace %v.", attr.GetNamespace()))
 		}
+		targetNamespace = targetNamespaceEntry.GetInfo().Name
 		targetNamespaceID = targetNamespaceEntry.GetInfo().Id
 	}
 
@@ -740,6 +747,7 @@ func (handler *workflowTaskHandlerImpl) handleCommandStartChildWorkflow(
 			return handler.attrValidator.validateStartChildExecutionAttributes(
 				namespaceID,
 				targetNamespaceID,
+				targetNamespace,
 				attr,
 				executionInfo,
 			)
@@ -772,6 +780,10 @@ func (handler *workflowTaskHandlerImpl) handleCommandStartChildWorkflow(
 	_, _, err = handler.mutableState.AddStartChildWorkflowExecutionInitiatedEvent(
 		handler.workflowTaskCompletedID, requestID, attr,
 	)
+	if err == nil {
+		// Keep track of all child initiated commands in this workflow task to validate request cancel commands
+		handler.initiatedChildExecutionsInBatch[attr.GetWorkflowId()] = struct{}{}
+	}
 	return err
 }
 
