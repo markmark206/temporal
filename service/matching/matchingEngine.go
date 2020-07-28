@@ -620,13 +620,10 @@ func (e *matchingEngineImpl) listTaskQueuePartitions(request *matchingservice.Li
 	if err != nil {
 		return nil, err
 	}
-	partitionHostInfo := make([]*taskqueuepb.TaskQueuePartitionMetadata, len(partitions))
+	partitionHostInfo := []*taskqueuepb.TaskQueuePartitionMetadata{}
 
-	if err != nil {
-		return nil, err
-	}
 	for _, partition := range partitions {
-		if host, err := e.getHostInfo(partition); err != nil {
+		if host, err := e.getHostInfo(partition); err == nil {
 			partitionHostInfo = append(partitionHostInfo,
 				&taskqueuepb.TaskQueuePartitionMetadata{
 					Key:           partition,
@@ -660,7 +657,7 @@ func (e *matchingEngineImpl) getAllPartitions(
 
 	partitionKeys = append(partitionKeys, rootPartition)
 
-	nWritePartitions := e.config.GetTasksBatchSize
+	nWritePartitions := e.config.NumTaskqueueWritePartitions
 	n := nWritePartitions(namespace, rootPartition, taskQueueType)
 	if n <= 0 {
 		return partitionKeys, nil
